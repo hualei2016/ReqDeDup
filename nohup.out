@@ -329,3 +329,5 @@
 [I 2024-09-07 15:25:26.999 ServerApp] Restoring connection for 6bf9fe21-b6b3-4029-af4e-9cb2d6cb187f:f357bdad-4749-4652-bd66-b59aff15248b
 [I 2024-09-07 15:25:27.036 ServerApp] Connecting to kernel 0c6987c3-bd63-499b-82cd-e28d0e6bcf4d.
 [I 2024-09-07 15:25:27.036 ServerApp] Restoring connection for 0c6987c3-bd63-499b-82cd-e28d0e6bcf4d:6043ad5e-3e57-45ff-85f9-240b17ef6e84
+[I 2024-09-07 20:51:51.302 ServerApp] Saving file at /get-redmine-req-data.ipynb
+[I 2024-09-07 20:51:51.441 ServerApp] Saving file at /req-dedup.ipynb
