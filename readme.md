@@ -16,3 +16,5 @@ STEP 4: Result analysis - Calculate precission, recall and accuracy
 	calc_recall_and_precission.ipynb
 
 The project also contains a lot of other files, including both input and output files. But you can skip STEP 1 if you are not so interested in how to retrieve the requirement dataset from redmine. If so, you can just start with STEP 2, and the input file "all_issues_for_test.csv", which contains 743 requirements. 
+
+
