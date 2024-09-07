@@ -1,0 +1,1373 @@
+﻿#,Subject,Author,Status,Related issues,Description
+41143,Project Menu Module Access Configuration,Andres Eduardo Garcia Marquez,Closed,Is duplicate of #10091,"Dear Redmine Team,
+
+I would like to propose an enhancement that would allow administrators to define which project menu modules are accessible to end users. Currently, modules such as ""Time Tracking,"" ""Gantt,"" and ""Calendar"" are enabled by default, which can overwhelm the user experience, especially in scenarios where end users only need access to request submission and tracking modules.
+
+Implementing this feature would improve usability and streamline the workspace for users who require limited access, avoiding unnecessary distractions and simplifying their interaction with the platform.
+
+Thank you for considering this request. I am available to discuss further details if needed.
+
+Sincerely,"
+41031,Include project identifier in List-Id header field of notification emails,Go MAEDA,Closed,Is duplicate of #13359,"I propose adding the project identifier to the @List-Id@ header field of notification emails. Currently, the @List-Id@ is based on the emission email address (@Setting.mail_from@). I want to change the List-Id to include both the project identifier and the emission email address.
+
+The current notification email headers include the @X-Redmine-Project@ field, which contains the project identifier. However, widely used email services Gmail do not support filtering based on custom headers starting with @X-@. This makes it difficult to create filters based on the project.
+
+By including the project identifier in the @List-Id@, users can utilize Gmail’s @list@ operator to create filters based on the project. This enhancement would improve the ability to organize and manage project-related emails in Gmail.
+
+
+*Current Implementation:*
+For an emission email address of @redmine@example.net@, the current List-Id is:
+
+<pre>
+List-Id: <redmine.example.net>
+</pre>
+
+*Proposed Implementation:*
+For an emission email address of @redmine@example.net@ and a project identifier of @ecookbook@, the proposed List-Id is:
+
+<pre>
+List-Id: <ecookbook.redmine.example.net>
+</pre>
+
+*Backward Compatibility:*
+
+Changing the @List-Id@ header field value will affect users who depend on the current format. To address this, we may need to add a new setting in Administration > Settings page allowing users to choose whether to include the project identifier in the List-Id. This ensures that existing workflows relying on the current List-Id format remain unaffected.
+"
+40307,Attachment file rename edit option disable,Gco IT,Closed,Is duplicate of #4362,How to disable the attached file edit option
+39504,REST API need created_by field in the API,pivid IS,Closed,Is duplicate of #9812,"While creating an issue using REST API in similar to 'assigned_to_id' for an issue assigned to a user, need a 'created_by_id' while creating a issue "
+39218,Send 2FA security notifications asynchronously,Mischa The Evil,Closed,"Related to #38388, Is duplicate of #36005","Given what Jean-Philippe Lang wrote in #38388#note-2:
+> In Redmine 4.2, security notifications seem to be sent synchronously, unlike other notifications that are sent later. It triggers a timeout when sending the notification from redmine.org.
+
+It might be better if Redmine would send security notifications asynchronously too."
+39047,Add description field for issue queries,Liane Hampe,Closed,Is duplicate of #9309,"It would be nice to have an issue query description field since sometimes it is difficult to name the description so that other users are able to fully understand it.
+
+The text filed in the new query form could be provided with wikitoolbar and the possibility to reference or include a wiki page or other macros.   
+
+The description could be rendered right below the query name and should also be available on gantt and calendar page.
+
+---
+
+!clipboard-202309081141-e5hz5.png!
+"
+39025,two performers for one task.,Roman Pat,Closed,Is duplicate of #12579,"Colleagues, please tell me. Is it possible to assign two performers to one task at the same time."
+38682,Disable option to upload files in tickets,Rene Goral,Closed,Is duplicate of #8168,"I've installed the DMSF plugin and want this as the only module to handle files. So I disabled the files and documents module for every project. 
+!clipboard-202306081822-tbavg.png!
+But people are still able to upload files using the standard file upload. 
+!clipboard-202306081822-a048c.png!
+That's a bit confusing for the users and pretty hard to handle for me as an admin. In some projects I want to disable the possibility to upload files for a reason.
+From my point of view if the modules are disabled users shouldn't be able to upload files. At least administrators should have the option to disable the ""classic"" file upload via administration center and/or per project."
+38542,Better username completion in the editor,Hendrik Jaeger,Closed,Is duplicate of #13919,"Hi
+
+in #38511 someone tried to highlight me but since my name is ""Hendrik Jäger"" and only this part is actually displayed, they chose the obvious but wrong highlight (at)Hendrik, which is not me but ""Hendrik Adam"" (I’m (at)henk).
+
+It would be nice to have better completion for this. The mechanism for completing ticket numbers with the popup would be well suited but it would have to search for both login-names and real-names.
+
+Thanks for considering!"
+38541,Automatic deletion of unactivated accounts,Hendrik Jaeger,Closed,Is duplicate of #30998,"Hi
+
+in the context of #38511 I noticed that even after one week my unactivated account @henk_test was not deleted but still waited for me to click the confirmation link.
+
+I see a similar issue with my own redmine instance where registrations require administrator approval: I have to delete a lot of accounts registered by bots.
+
+It would be great to have redmine expire unconfirmed/unactivated accounts after a configurable amount of time."
+38355,カスタムフィールドにbyte数制限追加  Request for limitation of byte number to custom field,Ayako Matsuzawa,Closed,Copied to #38357,"現在カスタムフィールドには文字数制限が可能ですが、byte数制限をかけたく、ご検討お願いいたします。目的としては、社内の生産システムとの連携になります。
+
+Currently, custom fields have limitation only for number of characters.
+We would like you to add limitation of byte number for operation of redmine with our production system.
+
+Japanese has full-width characters(2bytes) and half-width characters(1byte).
+
+Thank you for your cooperation in advance."
+38343,"Change the default notification option to ""Only for things I watch or I am assigned to""",Go MAEDA,Closed,"Related to #38238, Is duplicate of #39500","Currently, the default notification option of a user is ""Only for things I watch or I'm involved in"". This means that a user will receive notifications about issues of which the user is an author, assignee, or watcher. I think it would be better to change the default value to ""Only for things I watch or I am assigned to"". With the option, the user will receive notifications about issues of which the user is an assignee or watcher.
+
+* ""Only for things I watch or I'm involved in"" (internal name is @only_my_events@): issues of which the user is an *author*, assignee, or watcher
+* ""Only for things I watch or I am assigned to"" (internal name is @only_assigned@): issues of which the user is an assignee, or watcher
+
+In Redmine 5.1, we will have ""Auto watch issues on issue creation"" feature (#38238). Since the new feature is enabled by default for newly created users, new users in Redmine 5.1 automatically become a watcher of issues they create. Becoming an issue watcher automatically means that the user will always receive notifications for issues they create even if the user's notification option is set to ""only_assigned"". Whether the setting is ""only_my_events"" or ""only_assigned"", the type of notifications received will be the same.
+
+Given that ""only_my_events"" and ""only_assigned"" behave the same when the user's settings are left at their defaults, I think it would be better to change the default setting for email notifications (@Setting.default_notification_option@) from ""only_my_events"" to ""only_assigned"" because of the following reasons:
+
+* Users can stop notifications of issues they created by unwatching those issues. This fulfills feature requests such as #6914 and #27135
+* The behavior is confusing if ""Auto watch issues on issue creation"" is enabled and the notification setting is ""only my events"". The user will assume that the reason they receive notifications about issues they created is that they watch the issues. And if they want to stop receiving notifications, they will unwatch the issue. However, unwatching will not stop notifications when the notification setting is ""only_my_events"".
+
+
+"
+38255,Filter free and paid plugins in the plugin directory,Vendel Czinder,Closed,Is duplicate of #17689,"Hi all,
+
+there are numerous plugins in the plugin directory that are either demo or trial versions or otherwise limited, pushing the users to buy the full (paid) version of the plugins.
+I have no grudge against them as these are also great and well supported software, but finding open-source and free plugins really gets cumbersome because of them.
+
+My proposal: create tags and/or categories (or similar) for all the plugins and create filtering based on this information. (maybe like the compatible Redmine version dropdown)
+
+Thank you for considering my proposal, please feel free to comment, and if I can help in any way, I'll try. (although I  have a very limited understanding of the technical workings of this system).
+If I've opened my issue at the wrong spot, feel free to point me in the right direction. 
+
+Thank you,
+Vendel"
+38173,"Increase limit of entries in json/xml and, preferably, make it configurable",Sergey Naumov,Closed,Related to #16069,"Currently there is a limit on how many entries could be returned by JSON/XML API in one batch - 100 entries. This limit is hardcoded in Redmine core. Such a low limit makes requests to Redmine to be affected by RTT + it could put more load on DB. 
+
+The question is why this limit it not set to at least 500 (the default value for number of entries exported via CSV export API). Could this limit be made configurable just like for CSV?"
+37717,"""Show completed versions"" by default",thuruk thuruk,Closed,Is duplicate of #13670,"It would be useful not only to be able to show completed versions by default, but to separate _closed_ versions from _completed_ versions.
+In my case, we put out versions at irregular intervals so we can have a version that's completed, but won't come out for a few weeks. In the meantime, I have to click ""Show completed versions"" everytime I want to see it, and I get _all_ versions, including the closed ones."
+37634,Export spent time report as PDF,ki be,Closed,Copied from #33325,"I guess this plugin doesnt work for redmine 5.x.
+I tried but couldn't start redmine with this plugin.
+"
+37365,Allow users to choose textile or markdown formatting,Christian Kay,Closed,"Related to #34863, Is duplicate of #8095","Currently you can only set the the Text formatting to Textile or Markdown globally. You can't manually select what you prefer at user/issue/project base.
+
+Additionally upgrading from Textile to Markdown is error prone and at some size it is not manageable to manually fix the caused problems due conversion (Reformat plugin).
+So there is no reasonable way to convert from textile to markdown. 
+Even then long term users might insist that they are used to textile and they do not know markdown (ofc there is a workaround, learning a new syntax).
+
+Please add the possibility to choose the formatting at user/issue/project base.
+Without the option a transition from textile to markdown is pretty impossible (old stuff could keep textile, new stuff markdown)."
+37133,Add solar date to Redmine,Abbas Samgani,Closed,Is duplicate of #12889,"Redmine is a very useful tool for project management, but due to lack of +solar date+ we can not use it.
+Please add the *solar date feature* to the project if possible."
+36942,Admin status messages on every page,C S,Closed,Is duplicate of #36182,"Due to the current situation, I wish there was a way to display a message at the top of every page you visit, so that everyone knows that we are currently having a technical problem ;)"
+36805,Update Rails to 7,Marius BĂLTEANU,Closed,"",""
+36504,PDF preview in attachment Page,Daniel Koch,Closed,Is duplicate of #22483,"if u have enabled PDF Thumpnailsupport and click on a Thumnail u get redirected to the attachment Page, but there is no preview of the file itself, it should be also possible to show the PDF file."
+36246,Multi project csv import,Cristian Bazzucco,Closed,Is duplicate of #25808,"Hi, now the issue import function is limited to a single project.
+Why don't extend it to multiple project using his own column?"
+36198,Set standard columns in the ticket listing options based on projects,C S,Closed,Is duplicate of #7360,"Currently this can only be set globally in the system configuration.
+
+But since we have different types of projects, each with their own, user-defined fields, we cannot link these displays to the respective project.
+
+So it would be great if the global setting option could be adapted in the individual project configurations"
+36183,"Dynamic decimal separator, according to country setting",C S,Closed,Related to #22024,"Currently, glide ratios must be entered with a point as a decimal separator. However, this is not common worldwide, in Germany the comma is used for this and the point as a thousand separator.
+
+It would be great if Redmine could take this into account according to the country / language setting ..."
+35989,Plugin that Includes spent hours in issues REST API responses,Anonymous,Closed,Is duplicate of #34857,"Hi there,
+
+I wrote a plugin which extends original issues' REST API feature with following:
+
+* include spent hours in records of responses to REST API request
+
+If this UX is built in to original Redmine, I'm happy!
+
+Built for Redmine 4.1.
+"
+35747,Allow style attribute for HTML elements in CommonMark formatter,Go MAEDA,Closed,"Related to #32424, Has duplicate #37237","The CommonMark formatter introduced by #32424 currently does not allow style attribute for HTML elements.
+
+If the attribute is allowed, you can decorate text as follows.
+
+<pre>
+<span style=""color: red;"">IMPORTANT NOTICE</span>
+</pre>"
+35686,Add configured theme and whether it includes JavaScript to Redmine::Info.,Mischa The Evil,Closed,Is duplicate of #32116,"Given that a fair amount of (UI) issues are caused by a third-party theme (see e.g. recently closed #35258 and #35534), it would be really helpful if information about the configured theme and whether it includes JavaScript is added to @Redmine::Info@.
+
+Example:
+
+!2021-08-05_01-36-12.png!
+
+I'll leave a patch against current trunk."
+35685,Support for MySQL > 5.7 or MariaDB,Martin Jungowski,Closed,"Related to #39437, Related to #19395","Given that I cannot see anything on the roadmap I'd like to ask what the state of MySQL support is. As stated on the Install page the latest officially supported release is MySQL 5.6, which has been EOL since February of 2021. MySQL 5.7 seems to work just fine but is not yet officially supported (it's on the roadmap for the next major release after 5.0!) and has an EOL date of October 2023 (aka slightly over 2 years from today). At the current speed of development I fear that MySQL will be EOL long before it is officially supported by Redmine. MariaDB is not supported at all.
+
+Any insight?"
+35509,Description of issue statuses,Ivan Cenov,Closed,Is duplicate of #2568,I think that issue statuses will benefit from an additional description field. This field may contain information about the status. Also this description may appear on balloon when users hover with mouse over the status names.
+35216,Create/Update custom fields via API,Luny Luny,Closed,Is duplicate of #9664,"To maintain my custom fields I would like to update the values with a job using the API
+
+<pre>
+PUT http://redmine.org/custom_fields/8
+</pre>
+
+<pre>
+        <id>8</id>
+        <name>ApiTestField</name>
+        <customized_type>issue</customized_type>
+        <field_format>list</field_format>
+        <regexp></regexp>
+        <min_length/>
+        <max_length/>
+        <is_required>false</is_required>
+        <is_filter>false</is_filter>
+        <searchable>false</searchable>
+        <multiple>false</multiple>
+        <default_value></default_value>
+        <visible>true</visible>
+        <possible_values type=""array"">
+            <possible_value>
+                <value>1</value>
+                <label>1</label>
+            </possible_value>
+            <possible_value>
+                <value>2</value>
+                <label>2</label>
+            </possible_value>
+            <possible_value>
+                <value>3</value>
+                <label>3</label>
+            </possible_value>
+            <possible_value>
+                <value>4</value>
+                <label>4</label>
+            </possible_value>
+            <possible_value>
+                <value>5</value>
+                <label>5</label>
+            </possible_value>
+            <possible_value>
+                <value>5</value>
+                <label>5</label>
+            </possible_value>
+            <possible_value>
+                <value>6</value>
+                <label>6</label>
+            </possible_value>
+        </possible_values>
+        <trackers type=""array""></trackers>
+        <roles type=""array""></roles>
+</pre>"
+35122,solar calendar,Abbas Samgani,Closed,Is duplicate of #12889,"Hi dears
+I have been following the solar calendar for Redmine for a long time, but I didn't find any results,
+People who have done this before are from older versions of Redmine.
+Is it possible to create a plugin in this regard?"
+35063,Set values for reminder,Ilya Kabirov,Closed,Is duplicate of #28638,Is it possible to include in reminder settings such feature as selection of necessary status for issue? In my case I need to exclude the resolved issues from reminder as it done for the closed issues.
+35032,Get allowed Issue statuses by Issues API,Yuichi HARADA,Closed,Is duplicate of #24976,"If you want to edit issues using API, you need to know the issue statuses that you can available."
+34912,Save ticket by pressing keyboard key,Marco Shima,Closed,Is duplicate of #29473,"From other systems like Mediawiki I know the feature that pressing ALT+S saves all changes. Unfortunately the more obvious CTRL+S is used by the browser itself. It would be very helpful to have the same in Redmine as an abreviation for scrolling down and pressing the button ""Anlegen"" (German version, Englisch ""Create""?)."
+34881,Activity page block,Süleyman Enderbey,Closed,Is duplicate of #2585,"Hi all, 
+
+I want to prevent users other than the administrator account from seeing the activity section? how can I do it?
+
+regards..."
+34845,Configuration of display of subtickets,Marco Shima,Closed,Is duplicate of #11969,"We use grouping of tickets a lot for semantic organization. That means that we have kind of group tickets that contain subtickets (e.g. a bug is a subticket of the feature group ticket it affects). The list of subtickets displayed may be quite large, scrolling is needed. Because of that we would like to get the possibility to configure the columns of the subticket listing.
+
+Easy:
+- Same columns as configured as default for ticket searches
+
+Luxury:
+- Configuration per project or even per ticket."
+34793,Filter OR / AND for issues and repeated columns in filter settings,Micael Broun,Closed,Is duplicate of #4939,"1. For what:
+I can't do filter now about ""this version or that version"", ""this dates or that dates"", ""this version and status or that version and status""
+
+2. What need to do:
+In filter for task add:
+* 2.1. Ability to use column many times
+* 2.2. Blocks AND / OR
+
+PS Cool, if i could filter tags with this logic"
+34566,Always trim title,Michael Aram,Closed,Is duplicate of #9588,"Currently, it is possible to re-title an issue from ""myissue"" to ""myissue "". This is reflected/shown in the history as well. In practice, it makes no sense to allow leading and trailing whitespace in ticket titles. Therefore, I recommend to always trim the title field (and probably other fields as well) upon input, so that it doesnt even make it into the database."
+34062,Upgrade Rails to 5.2.4.5,Daniel Müller,Closed,Is duplicate of #33906,"CVE-2020-8165 (https://nvd.nist.gov/vuln/detail/CVE-2020-8165)
+
+It would be very helpful if Redmine would work with the latest versions of Ruby and Rails. My server has been shut down for testing, since older versions are in use."
+33835,Redmine links: Issues: add link for subject,Charles Atkinson,Closed,"","Using examples from https://www.redmine.org/projects/redmine/wiki/RedmineTextFormattingTextile, please consider adding to ...
+<pre>
+#124
+#124-6
+#124#note-6
+</pre>... a new link format which would also display the current subject of the issue, say 
+<pre>
+#124:
+#124-6:
+#124#note-6:
+</pre>This feature would allow the user to know the subject of an issue link without having to open the link.
+ 
+Versions
+<pre>
+root:~# aptitude show postgresql-9.6 | grep Version
+Version: 9.6.17-0+deb9u1
+root:/usr/share/redmine# ruby bin/about
+
+sh: 1: svn: not found
+sh: 1: darcs: not found
+sh: 1: hg: not found
+sh: 1: cvs: not found
+sh: 1: bzr: not found
+Environment:
+  Redmine version                3.3.1.stable
+  Ruby version                   2.3.3-p222 (2016-11-21) [x86_64-linux-gnu]
+  Rails version                  4.2.7.1
+  Environment                    production
+  Database adapter               PostgreSQL
+SCM:
+  Git                            2.11.0
+  Filesystem                     
+Redmine plugins:
+  redmine_category_watchers      0.0.1
+  redmine_close_button           0.0.8
+  redmine_emojibutton            0.4.1
+</pre>"
+33791,"""First Name"" and ""Last Name"" as mandatory fields?",bike punk,Closed,Is duplicate of #29757,"Is there a reason to have the ""First Name"" and ""Last Name"" as mandatory fields for registration ?
+IMHO is quite privacy unfriendly
+such personal information is not necessary to contribute to a project
+
+Would be nice to make these fields not mandatory by default."
+33672,Project Responsible Field,Jean B,Closed,Is duplicate of #11294,"Hello,
+
+I'll try to explain the feature with my real life example. 
+One day person came and asked me to create a project for him, so I duplicated a template for him and all fine. The problem is: now when I click in ""My Page"", it shows to me the issues related to that project which I don't care and I also used to receive e-mails from it (not sure if the e-mail is still being sent after Redmine 4).
+So, what I imagine, is a simple way on the settings of selecting another person to be the responsible one, maybe a checkbox similar to adding member to a project. I imagine that this information is stored somewhere.
+
+Thanks!
+BR,
+Jean"
+33612,Expose repository version via REST API,Tom Quern,Closed,Is duplicate of #5901,"For Redmine clients interacting with different versions of the Redmine server it would be beneficial to have an easy way to identify the server version. Currently this information is available in the web UI: <your-host>/admin/info and can be scrapped from the page (e.g. with Jsoup), but it's a hack. Having a REST endpoint with that information exposed would be great.
+
+Or is there a more convenient workaround than the one mentioned above?"
+33526,Add possibility to configure limit used to retrieve objects for an API response,VVD VVD,Closed,Is duplicate of #16069,"In file app/controllers/application_controller.rb:
+<pre>
+  # Returns offset and limit used to retrieve objects
+  # for an API response based on offset, limit and page parameters
+  def api_offset_and_limit(options=params)
+    if options[:offset].present?
+      offset = options[:offset].to_i
+      if offset < 0
+        offset = 0
+      end
+    end
+    limit = options[:limit].to_i
+    if limit < 1
+      limit = 25
+    elsif limit > 100
+      limit = 100
+    end
+    if offset.nil? && options[:page].present?
+      offset = (options[:page].to_i - 1) * limit
+      offset = 0 if offset < 0
+    end
+    offset ||= 0
+    [offset, limit]
+  end
+</pre>
+The value of the limit is hardcoded to 100.
+It's very long to get for example 20000 objects - 200 requests in ~3 minutes. But it's faster with hardcoded limit 10000 - ~20 seconds only.
+
+Please, add possibility to configure limit used to retrieve objects for an API response.
+
+Thanks!"
+33479,Make other destinations visible in the Redmine notification email,Yuuki NARA,Closed,Is duplicate of #30787,"Make other destinations visible in the Redmine notification email
+
+h1. Proposal
+
+In Redmine4.0, other destinations are no longer displayed in the notification email.
+
+This is a side effect of the following changes in Redmine 4.0.
+https://redmine.org/issues/26791
+
+Depending on the contents of the ticket, it may be necessary to confirm who is notified.
+For example, the response may change depending on whether the trouble ticket content is delivered to the CEO.
+
+In Redmine3.4, it was found from the To / Cc column of the notification email that the email was sent to someone else.
+In Redmine 4.0 or later, you can not understand without checking the ticket.
+
+Also, the amount sent to the person who has been set to ""notify all"" in the personal settings cannot be confirmed on the ticket.
+
+h1. Solution
+
+There is no problem in sending individual emails.
+The only inconvenience is that you can no longer check the simultaneous notification destination directly from the email.
+
+It seems that the conventional To / Cc (watch) can be added to the beginning of the email text by setting the individual ID unit.
+
+h1. Supplement
+
+In Redmine3.X, there was a side effect that other destinations could be known by batch mailing. (Specification changed in 4.0)
+It seems that it was not recognized that there were cases where this was used as a substantial function.
+(In some cases, it may be necessary to respond depending on the email notification destination)
+
+You can tell by checking the ticket from the link on the notification email, but it will be a burden if there are many cases.
+
+/* The following is a Japanese supplement */
+
+Redmineの通知メールで、他の宛先を表示可能にする
+
+■提案内容
+
+Redmine4.0にて、通知メールで他の宛先が表示されなくなった。
+
+これはRedmine4.0の下記変更による副作用である。
+https://redmine.org/issues/26791
+
+チケットの内容によっては、他の誰に通知されているか確認必要な場合もある。
+例えば、トラブルのチケット内容がCEOに配信されているかどうかで、対応が変わる場合もある。
+
+Redmine3.4の時は、通知メールのTo/Cc欄から、他の誰に送信されたか判ったが、
+Redmine4.0以降ではチケットを確認しないと判らない。
+
+また、個人設定で「すべて通知」にしている人への送信分は、チケット上から確認できない。
+
+■解決策
+メールの個別送信自体には問題ない。
+同時通知先をメールから直接確認できなくなったのが不便なだけ。
+
+個人ID単位の設定により、従来のTo/Cc(watch) をメールテキスト先頭に付けられれば良いと思われる。
+
+■補足
+Redmine3.Xでは、メール一括送信により他の送信先が判るという副作用があった。（4.0で仕様変更）
+これを実質的な機能として利用している場合があったことが、認識されていなかったと思われる。
+（メール通知先により対応必要なケースもある）
+
+通知メール上のリンクからチケットを確認すれば判るが、件数が多ければ負担になる。
+
+本チケットの対応は下記に記載します
+https://redmine.tokyo/issues/1083
+"
+33330,Import of issue relations when imported from csv,Aleksandar Pavic,Closed,Is duplicate of #28198,"There is no ability to import Issue relations when importing from csv.
+
+Perhaps they can be delimited in different way to fit in one field, or provided in json form inside csv field. "
+33288,Add wiki bar to Time_Log,Ali Hamdan,Closed,Is duplicate of #33256,Is it possible to add a wiki bar into custom_fields created onto the timelog form
+33286,"Multiple search terms in ""Subject"" filter",Hirofumi Kadoya,Closed,Is duplicate of #35764,"at custom query
+I can select single in subject 
+I can select multiple in issue 
+
+I'd like to select mulutiple likely issue
+
+ーーJa　startーー
+カスタムクエリーの題名において
+含む、および含まないの条件にも
+カンマを入れた場合、アンド条件としてほしい
+
+チケットと同じようにお願いします
+ーーJa　endーー"
+32757,Show warning when an issue cannot be closed because of blocking issue relations,Mischa The Evil,Closed,Is duplicate of #31589,"Same as/inspired by #31589, but for the case that issues cannot be closed as a result of blocking issues."
+32520,Issues activity gnats calendar tabs - too much real estate in high hand panel,Donald Martin,Closed,"Related to #30294, Related to #32037, Related to #21808","Hi
+
+Just a thought - the right hand panel in the views mentioned above are given far too much real estate for the data they contains.
+
+For example when I'm in the Issues view 1/3 of the screen is given to the right hand panel yet it only contains 3 small links and the rest of the panel is unused and coloured grey.
+
+Better sizing can make better use of this portion of the window.
+
+I've attached a screen grab to give as an example.
+
+I use a MAC and it's the same in Safari and FF.
+
+I've tried it with a vanilla Turnkey Hub VM and that's how it is out of the box."
+32501,"The English version of ""Help"" content is displayed on the page after clicking the ""Помощь"" button",vitali-test storchous-test,Closed,Is duplicate of #654,"Preconditions: The localization of the site must be ""Russian""
+
+1. Open the site http://www.redmine.org/ and log in
+2. Click the ""Помощь""
+3. Pay attention to the page
+
+Actual result: The English version of ""Help"" content is displayed on the page after clicking the ""Помощь"" button
+Expected result: The Russian version of ""Help"" content is displayed on the page after clicking the ""Помощь"" button"
+32496,bulk edit issue by import CSV,Taine Woo,Closed,Is duplicate of #23448,"We can import CSV to batch creating new issues.
+But if we provided the Issue#id in the CSV, also some other columns which need to be updated, we should be able to update the existing issues, but not to creating new issues."
+32493,Add capability to make an attachment\s obsolete and to collapse all obsolete attachments and focus only the necessary ones (like bugzilla),pasquale [:dedalus],Closed,Is duplicate of #1984,"When a ticket has a lot of screenshot and\or patches, it's very comfortable to be able to makes attachments no longer necessary as obsolete. In this manner we can collapse all obsolete attachments and focus only the necessary ones.
+
+The proposed feature is already present in bugzilla (see attachment:bugzilla.png)"
+32491,Watcher can see tickets independent from issue visibility,Martina A.,Closed,Is duplicate of #23546,"Hello Redmine Team,
+
+we would need the following configuration option: 
+In our projects, our members have the issue visibility ""Issues created by or assigned to the user"".
+This is set by default, due to GDPR and internal reasons.
+
+For some cases, we would need to allow watchers to see the issue and also be informed via E-Mail about changes. But with above issue visibility this is not possible. We can add watchers, but of course, they do not see the issue.
+
+In contrast, setting the issue visibility to ""All non private issues"" would allow them to see too much tickets.
+
+So a combination would be great: general setting for visibility is ""Issues created by or assigned to the user"" but with the exceptional case, if a person is assigned as watcher.
+It should be possible, that the watcher can see those issues, he has been added to.
+
+Thanks in advance."
+32406,[ISSUE RELATIONS] Add several relations at a time,César DJ Caësar 9114,Closed,Is duplicate of #29272,"For the moment the relations can be added one by one.
+It could be great to add a group of relations, sending an array of relations, for example."
+32321,Issue filter: new filter: Author's Group,Taine Woo,Closed,Is duplicate of #7867,"There is a filter as ""Asignee's Group"", and it would be better to have filter ""Author's Group""."
+32291,Need some patch to enable emails queue,Ilya Kabirov,Closed,Is duplicate of #26791,"I'm using redmine on Windows platform (Bitnami), smtp is set on gmail. In case I'm creating a new, the email about it trying to send for more than 50 recipients, so I'm getting an error 452 4.5.3 - too many recipients. Is it possible to develop some patch to make the queue of emails, sending one by one and not by all pack in time? Many thanks!"
+32140,Document MySQL database migration to utf8mb8,Sylvain Faivre,Closed,"","Feature #31921 included in 4.1.0 sets utf8mb4 as default encoding for new MySQL databases setups.
+
+In the description, Marius BALTEANU added :
+> I'll try to create later a Wiki page regarding the steps required to migrate and existing installation or at least some useful links.
+
+There is no documentation explaining how to migrate yet.
+
+#21398 includes a migration script, but people in that thread reported failures with the script."
+32090,REST API: users: add support for status=*,Martin von Wittich,Closed,Is duplicate of #40099,"Currently, [[Rest Users|the /users.:format REST API]] will default to status=1 (active), that is, when you attempt to search for a certain user (@redmine-admin.auth@ contains an API token of an administrator in the format @-u TOKEN:x@):
+
+<pre>
+curl -H 'Content-Type: application/json' \
+  -G -K redmine-admin.auth \
+  'https://redmine.example.com/users.json?name=firstname.lastname'
+</pre>
+
+it will only return the requested account when the account is active. This means that I have to make two request for @status=1@ and @status=3@ to find a user when I don't know if the account is locked or not :(
+	
+I would have suspected that @status=*@ would return all kinds of users, similarly to how it works for [[Rest Issues]] with @status_id=*@, but this is apparently not the case."
+31984,Permission to add timelogs in past,Aleksandar Pavic,Closed,Is duplicate of #13244,"There is permission to edit time logs, 
+
+But, what's missing is +forbid to add time log for date in past+.
+
+There are many use-cases where employees log time on daily basis, but should not 
+be able to log time retro-actively.
+
+Even if they don't have edit timelog permission, they can still log
+time for days in past, which should be good to forbid.
+
+"
+31714,Allow to add custom fields of type date to calendar view,Maxim Krušina,Closed,"Related to #27095, Related to #10267","On the calendar view, there are visible start and due dates. We have more custom fields of date tye, like a deadline (it's the deadline to deliver an issue to the customer, it's not Due date, which is for our team). I need to render those values in the project's calendar view.
+
+Thanx-a-lotta!"
+31638,Issue start date date type changed to date time.,Jim McAleer,Closed,Related to #5458,For tightly scheduled tasks the issue start date needs to be a datetime field.  With that the related links precedes and follows we need a value the and option for minutes or days.  I can't believe others haven't asked for this.  Sorry if it duplicates other requests.
+31618,make version description field rich,Joe D,Closed,Is duplicate of #1680,it would be great if we could have a formatted description field on Version's such that #issue get linked and other useful information can be more easily shown
+31518,Default due date for issues,Go MAEDA,Closed,Is duplicate of #13296,"It would be nice if we can configure Redmine to set a default due date for issues (N days from today).
+
+Due date is important in Redmine. Issues without a due date are not notified by email reminders and sometimes forgotten by users. I am sure that this feature is simple but helpful for users."
+31377,"Updating project status, or archiving with REST","Jonas Ineveld, van",Closed,Is duplicate of #13725,"Hi Redminers,
+
+I've searched and checked google, the forums and documentation, but cannot find any way to close projects while using the REST api.
+Our redmine instance is synced with another platform, and is updated using the REST api. But now projects are closing in the other platform and stay open in redmine. This is resolving in quite some clutter at the moment.
+
+I would like to do a patch request with status=0 for example.
+
+Is this a bug, existing but undocumented or a new feature?
+
+Thanks a lot in advance!
+
+( if it's currently not possible, could someone help me creating a patch for this? )
+
+- Jonas
+"
+31340,Allow restrict auto create accounts for sender domains by list,Manuel Bernhardt,Closed,Is duplicate of #14341,"It would be nice, if there would be a option(s) which restrict auto create accounts for new users only to specific sender domains."
+31338,Add option for append mail header to ticket,Manuel Bernhardt,Closed,Is duplicate of #21158,"Currently, if a user isn't registered at redmine and you allow to receive mails from unknown users, a ticket will created assigned to no one.
+Its okay, but somehow it should possible to find out, who has send that mail. I suggest, add the header of the mail to the ticket so the sender mail address and name if exists is available."
+31321,Option not to block closing a parent issue when its subtask is open,Hinako Tajima,Closed,"Related to #31322, Related to #10989, Is duplicate of #28492","From Redmine 3.4, the parent issue can't be able to close when the subtask is not closed yet. If it is possible to control turn on/off by configuration or management console, it would make easier to manage the issue closing process.
+
+Redmine 3.4から、子チケットがまだクローズされていない場合、親チケットはクローズすることができません。 コンフィグまたは管理画面で、オン/オフを制御することが可能であれば、チケットクローズのプロセス管理が容易になると考えます。"
+31234,Redmine assign a issue to more than one user,Gary Ge,Closed,Is duplicate of #408,"h3. How to assign a issue to more than one user by checking the checkbox of any user I want?
+
+Is there any way to make it?
+
+Thanks a lot."
+31112,Update to Rails 5.2.3,Go MAEDA,Closed,Is duplicate of #31113,"Rails 5.2.3 has been released on March 28, 2019.
+https://weblog.rubyonrails.org/2019/3/28/Rails-5-2-3-has-been-released/"
+30460,This project is closed and read-only so please hidden all issue on mypage,gralias gralias,Closed,Is duplicate of #29449,"When a project was closed and read-only, all my issues assigned to me still display on my page (Issues assigned to me). I think that not necessary for this case"
+30419,Drop support for MySQL 5.5,Marius BĂLTEANU,Closed,Related to #39579,"Support for MySQL 5.5 ended in December 2018:
+
+Resources:
+- https://en.wikipedia.org/wiki/MySQL#Milestones
+- https://www.fromdual.com/support-for-mysql-from-oracle
+
+There are no changes in the code from what I've found, I think that we should just update the wiki and add this ticket to the Changelog. 
+
+I propose to drop support in version:""4.1.0""."
+30336,"""Log Time"" feature controlled per Tracker",James H,Closed,Is duplicate of #29490,"Currently, I can enable or disable ""Log Time"" per Role.
+I would like this to be a per-tracker setting to allow for more control."
+29992,Add permissions to read all projects. ,Yar n,Closed,Is duplicate of #15835,"Now, only administrators can see list of all projects and sub-projects.
+
+But, it is needed to allow some people (or even group) who should see all this projects. 
+Why? to prevent chaos with adding new ones, for better understanding what is going on here.
+
+Currently i have to add Admin privileges for these users... which is not correct, cause they can edit system settings. "
+29897,hook: controller_issues_bulk_edit_after_save,Julián Maestri,Closed,Is duplicate of #8757,"From https://www.redmine.org/issues/8757
+
+To avoid the problems with stopping the bulk update if something fails on the hook, iterate over the saved issues after saving them"
+29687,Keep history for comment editions,Peter Volkov,Closed,Is duplicate of #12388,"Whenever I edit a comment it is updated but as far as I can see there is no history for that. We need history for all changes in the redmine. At least for comment edits.
+
+Probably this was reported in #9441 but due to bad style, it was considered as spam."
+29624,Possibility of auto updates to the latest stable version?,Anonymous,Closed,Is duplicate of #9020,"As an example, Simple Machines Forum software, while is made in PHP, but can notify a user with a red text about availability of a new version on simplemachines.org in it's admin panel, and then has the button to update itself to the latest version. It will then check the integrity of the current version and if everything is valid and ready for an upgrade, it would then install the update and migrate everything required. This makes it very convenient for the user.
+Would anything like this be possible with Redmine?"
+29615,Add has source revisions/check-ins to issue filters,Peter Berkman,Closed,Is duplicate of #28170,"it would be very handy to have a filter criteria for if the ticket is associated with any source code revisions/check-ins.  
+
+If set, the issues list would only contain tickets that are associated with source code Revisions."
+29519,Issues Section/Tab -Allow issues to be grouped by Parent,Bharat Shah,Closed,Is duplicate of #5325,Allow user to select parent issue in group by choices
+29471,Allow for calling users by their username,Kamil .,Closed,Is duplicate of #13919,"This is very popular function in modern tools (like GitHub, Slack, Jira, BitBucket...)
+It should be possible to ""call"" the user by username (e.g. using @username syntax) in comments.
+An suggestion box should be displayed while typing.
+Called user should receive email notification and have his name highlighted in comment."
+29254,Start date and due date in issue email notification,Senya Senya,Closed,Is duplicate of #13307,""
+29212,export gantt chart to  csv file,Randa Bustami,Closed,Is duplicate of #3097,can you add a feature to export gantt chart to csv file beside pdf and png format where pdf doesn't  support Arabic font
+29181,Edit fields in the grid,Matias Fusaro,Closed,Related to #9184,"Hi, I wanted to propose that somehow edit the fields of the issues in the grid be implemented.
+It would be a quick way to edit the fields and grant extra features.
+Thank you."
+29131,'View all Issues' adds project custom fields  Columns displayed on the issue list,zhangzhi liao,Closed,Is duplicate of #18006,"'View all Issues' adds project custom fields  Columns displayed on the issue list is very helpful feature!
+
+
+
+"
+29097,Migrate tickets from jira to redmine,Sampath Kumar,Closed,Is duplicate of #1385,"Hi I am new to redmine and we have installed it for cost effective purpose. Can any one help me out with the list of steps that should be followed for migrating the tickets from Atlassian JIra to Redmine.
+
+Your help will be highly appreciated"
+29074,"Add ""Edit"" function to entries in ""Spent Time"" block appropriately",J Ellis,Closed,Is duplicate of #26655,"In previous versions of Redmine, the ability to edit time entries from the ""Spent Time"" section of My Page  was used by my team fairly frequently.  Can that ability be returned as appropriate when the user has proper permissions?  The workaround right now is to open the issue, open the spent time for that issue, THEN click the entry that needs to be edited.  "
+28924,Issues filter: Adding a <<Nobody>> special entry to the user list,Christian Dröge,Closed,Is duplicate of #5535,"Sometimes it would be useful to have a special entry like <<Nobody>> in the user list, when filtering issues. The use case is the following: A user wants to filter issues, that are assigned to him OR are assigned to nobody, so that he can find issues to work on. Currently he can only filter for one specific user or a list of existing users, but he cannot select ""nobody"" as an additional user. So he has to open the issue list two times with different filters.
+
+There was already a similiar request in #689, but it is no possible to have a filter like: ""Assigned to <<Me>> OR <<Nobody>>""
+
+Thank your for considering this feature request."
+28913,Watcher Changes tracked in History,James H,Closed,Is duplicate of #9122,"Would like Redmine to track when watchers are added or removed.
+
+Currently does not track watcher changes and some users get confused as to what things they should have gotten email notifications on or not. Clear history will make clear whats going on.
+Prefer if adding/removing watchers does not refresh page (like how it currently works), but if watcher is added as a part of journal entries, it might have to."
+28893,Show number of attached files in Wiki Files-Link,Erik E,Closed,Is duplicate of #27090,"Right now, you have to click on the ""Files"" link below the wiki (to open the section) to see whether there are any files or not.
+
+I think it would be very useful to show the number of currently attached files in brackets, like
+
+Files (0)
+
+or 
+
+Files (42)
+
+I guess this would have no real performance implication and help the user very much.
+
+Thanks for any feedback to this idea!"
+28683,My Page Issues Block limit configurable, ,Closed,Is duplicate of #28011,"i think it would be a nice and easy thing, to have the issue queries on the »my page« changeable. currently they are hardcoded to 10, which make them a bit useless to our type of work environment.
+
+"
+28614,Issue Watcher view Issue when not in project group,Gerhard Neuhofer,Closed,Is duplicate of #23546,"Hi, 
+
+is there a way to let watcher view issues that they are not assigned to the projekt. 
+
+best"
+28533,Add a description in a custom queries,Diego Gonzalez,Closed,Is duplicate of #9309,"I have more than 40 different querys and it would be practical to be able to add to each one, a description of the results that it brings."
+28514,issue delete button confusion,Marc Mengel,Closed,Is duplicate of #26662,"In 3.4.3, if your last issue history item is only one or two lines, you end up with the history item delete button (trashcan) directly above the whole-issue delete button (trash can plus ""delete"") so that it is really unclear whether the ""delete"" text button goes with the history item or the whole issue, leading to accidental issue deletion.
+
+We should add a separator between the history list and the item action buttons.
+
+To reproduce: 
+
+* Add a one line Note to an issue and save it.
+* look at the delete buttons a the bottom right corner of the page.  
+
+!redmine_issue.png! 
+
+If we put some <hr>'s in the issue show template (patch attached) it becomes obvious that the ""delete"" text does not go with the history item, but with the whole issue.
+
+!after_patch.png!"
+28473,Using the classical 'list' view on projects,Paul Webster,Closed,Is duplicate of #26853,"I believe quite a few versions back there was a 'list' like view, 1 project per 'row' almost on the project page, is it possible to regain this view?"
+28405,Allow assigning issue to any user,Wojtek …,Closed,Is duplicate of #8629,"Currently it's possible to assign issue only to project members (and original author of the issue). It would be helpful to allow (for example only to admins / superusers) assigning issue to any user in the system (for example adding small ""+"" icon next to the default dropdown).
+
+It's already possible with watchers and it would be helpful for ad-hoc tasks."
+28368,regarding watcher added in private project but not getting notification ,pradeep pal,Closed,"Related to #16133, Is duplicate of #8488","Hi 
+   Created private project in redmine with role and permission called (viewownissue). when adding watchers , their are not getting notification nor email with ticket link 
+
+Can anyone help with this "
+28312,Option to automatically add user as watcher to an issue if they edit an issue they're not currently involved with,Colin 't Hart,Closed,Is duplicate of #1737,"We occasionally get users updating issues that they didn't create, nor are they watching.
+
+What happens then is they don't get email -- neither for the update they made, nor for any future updates.
+
+What we would like is to automatically have such a user added as watcher to the issue.
+
+Suggest that this be made an option, with it default to ""off"" for old behaviour."
+28223,Lack of access for Watchers if visibility=Issues created by or assigned to,RedChris B.,Closed,Is duplicate of #23546,"Dear,
+I would like to report that there is lack of possibility to set access to issues for Watchers if the issues visibility is set as ""Issues created by or assigned to the user"".
+In general it is possible to set the issues visibility as ""ALL issues"" but this is not a good solution when you want to limit access to some issues for certain people (more than author and assigned to).
+
+Therefore, I kindly ask developers for modifying existing or adding a new option of issues visibility that would provide access for the author, the assigned and additionally for the watchers."
+28202,Allow updating existing issues via CSV import,hoyfkd hoyfkd,Closed,Is duplicate of #23448,"It would be very helpful to be able to update existing issues through the CSV import function.
+
+"
+28086,Add context menu for attributes in issue details,Bernhard Rohloff,Closed,Related to #28829,"In addition to the nice improvements in #10485 and #28067 I would like to propose to also add the context menu to the attributes in the issue details view.
+One can move through the stack of issues and quickly change the status or priority without the need of entering the edit mode.
+This allows the user to manipulate attributes of the issue without leaving the context."
+28085,Wiki Toolbar on Full Width Custom Fields,Stephen Stuart,Closed,"Related to #21705, Is duplicate of #29712","Upon upgrading to version 3.4.4 we noticed we now have the ability to have custom long text fields with Full Width Layout and Text Formatting options.  
+
+When editing an issue, fields with these options should also have the wiki toolbar displayed.
+
+We were able to make it appear by adding a call to wikitoolbar_for in app/views/issues/_form_custom_fields.html.erb as follows:
+
+<pre>
+<% custom_field_values_full_width.each do |value| %>
+  <p><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %>
+  <%= wikitoolbar_for custom_field_tag_id :issue, value.custom_field %>
+  </p>
+<% end %>
+</pre>
+
+Note that I'm not checking the Text Formatting option so all full width fields have the toolbar."
+28081,"Option to keep last spent-time date on ""create and continue""",Andrea Cappalunga,Closed,Is duplicate of #29308,"When you have to add time spent in previous days, 
+it could be useful to ""continue"" adding entries on the date you previously inserted.
+
+Without that our team often insert wrong dates because date it's being automatically resetted to ""now"""
+27920,Show button to create new version in issue form even if all versions are locked or closed,Ivan Cenov,Closed,Is duplicate of #4569,"If all versions are closed or locked and there is no any version opened, there is no way to create new version when creating new issue or editing existing issue.
+
+When there are no opened versions the field ""Target version"" is not shown and the (+) button next to it is also not shown.
+
+I think that this is omission, because if there is at least one opened version, the (+) button for creating new version is shown."
+27879,Does redmine support bulk edit time log?,灿伟 姚,Closed,Is duplicate of #26534,""
+27875,SQL custom query,Tai Le Trinh Huu,Closed,Related to #5098,"dear friend,
+I would like to get help with a custom query which I can get data from Redmine Database with below field and condition
+Issue ID/ Tracker/ Subject / Author/ Assignee / Created / Start time / Closed / Status /Custom field 1/ Custom field 2 / Category / Priority
+and the condition to get data from date to date ( between ddmmyyyy - ddmmyyyy)
+thank you so much !
+"
+27870,API for editing/deleting notes in an issue,Serg Astra,Closed,Is duplicate of #10171,"Hi
+Could you please create API for editing/deleting?
+I found this comment #25793#note-7 from Toshi MARUYAMA but I can't understand how to do that.
+
+Thanks."
+27864,Subtasks inherit parent settings during copy,Alessandro Zucchi,Closed,Is duplicate of #14342,"Hi,
+often I copy issues across versions. My issues have a lot of subtasks.
+It would be useful if when I set, for example, version or status on  parent issue the same are set on the subtasks.
+Without this I must modify them afterwards, and this in not always easy.
+
+Regards
+Alessandro
+ "
+27680,Changing Subject Line in email notification when an issue is created or updated,Shakeel Masood,Closed,Is duplicate of #13981,"Currently the format is as follows:
+
+<pre>
+[ProjectName - Task #4983] (Closed) Email Notification Test1
+</pre>
+
+For email security reasons, we would like to add '#' at the beginning of the subject line:
+
+<pre>
+#[ProjectName - Task #4983] (Closed) Email Notification Test1
+</pre>
+
+Is it possible?  If so, then how?
+
+Thanks,
+Shakeel Masood
+MegaChips Technology America,
+San Jose, CA 95134, USA.
+
+"
+27677,New notfication settings value in role setting ,Heiko Böhme,Closed,Is duplicate of #8488,"it's possible to implement a fourth value for notifications type in role setting -> issue visibility -> ""issue created by or assigned to the user or user is watcher"" ? 
+
+In a project / issue in which the user is not the creator or assignee, he cannot receive updates via e-mail although he is an watcher. This fourth value could change this behaviour?
+
+Thanks and best regards, 
+Heiko
+
+"
+27541,New optional column for issue list: number of comments/updates,Robert Schneider,Closed,Is duplicate of #684,Just to get a quick impression if a ticket was updated/commented at all or if it is heavily discussed. If no comment/update was done yet an empty string instead of a '0' could be shown.
+27528,Custom fields list type improvement,Aleksandar Pavic,Closed,"","Every custom field in database has it's own ID in *custom_fields* table, and it's accessible thru *API*.
+
+However, when type is *LIST*, +list item values should be stored in separate table+, because of relational database integrity.
+
+If Redmine is to be integrated with some other software via API, and it needs to use custom fields of type LIST, integration can be
+performed only by value not by value's ID, which means, if someone changes value, 3rd party application's database integrity is lost, if it were ID, then integrity won't be lost, as it's in every other table of Redmine, or any other relational database. "
+27401,Switch from View ticket to Edit Ticket - hit the button E on your keyboard,Ralf Roeber,Closed,"Is duplicate of #449, Is duplicate of #6846","Coming from Confluence I really love that ""E"" button on my keyboard.
+Whenever I hit redmine and try to edit a ticket, pressing the ""E"" key makes me wonder, why Redmine not offers this handy, candy key to open the edit view of the ticket.
+.
+Pls add a keylistener to ticket view switching from VIEW to EDIT, when hitting ""E"" on the keyboard.
+.
+Would love to support you, testing the feature.
+.
+Thanks for taking my humble thoughts into consideration."
+27365,Filtering by two or more values for parameters without choosable options,Oleksandr Vasylenko,Closed,Is duplicate of #1140,"Hi!
+Is there an opportunity to insert for parameter ""Subject"" several values for filtering?
+For example, I want to exclude issues which contain two or more values (as I can do with ""Tracker"" or ""Status"" parameters)"
+27328,edit the time of the user,amit badia,Closed,Is duplicate of #3848,"hi 
+i need to know how do i add time as a project manager for the user on the project. certain time i face this issue to add time manually like 3 months back time to be added manually. 
+i need this feature for the projects managers and above "
+27234,I need put the custom fields lavel in multiple language,Jorge Garcia,Closed,Is duplicate of #3972,"Internationalization the custom fields is very a very important feature y think is posible since the creation of the custom field, only for administrators. Then if i change the language of redmine in my perfil, change the language of the of custom field.
+Its posible?"
+27128,Ability to choose default sort by column for all projects,Aleksandar Pavic,Closed,Is duplicate of #7360,"Much like what's available when new saved query is created.
+
+Preferably it should be shown in *admin | Settings | Issue tracking*
+
+at *Default columns displayed on the issue list* section.
+
+For example, from saved queries page:
+!2017-10-05 13_10_30-RCOM.png!"
+27036,Ticket status closed,Martina A.,Closed,Is duplicate of #13814,"Hello
+
+after the ticket status is ""closed"" several changes are still possible. For example one can add a comment or log the time.
+Is it possible to prevent this for special users?
+
+Thanks"
+27028,Issue's visibility for the watchers,Tigergm Wu,Closed,"Is duplicate of #8488, Is duplicate of #23546","Would you please consider the feature of extending the issue's visibility for the role to this issue's watchers?
+This is a moderate choice for administrator between the none-private and assign & author.
+Maybe there's influence for current role's authorization. You guys please think about it. Thank you so much.
+"
+26861,Display Issue Edit form Position according to comments chronological order,Stephane Evr,Closed,Is duplicate of #23518,"So I've set up my Redmine to display issue comments in reverse chronological order.
+
+I have an issue with hundreds of comments. When I hit Edit, the form is displayed at the very bottom of the page.
+
+To me, it would make more sense that the Edit page shows above the latest comment, so there is no need to Scroll all the way up to see what are the latest comments as I am adding new ones.
+
+So:
+
+- ""Show comments in chronological order"": Edit form is at the very bottom of the page
+- ""Show comments in reverse chronological order"": Edit form is displayed above the top comment
+
+Does this makes sense?"
+26709,Use correct http status codes,Pavel Rosický,Closed,Is duplicate of #34766,"1/ redmine ignores accept headers and jquery dataType attribute
+
+The Accept request-header field can be used to specify certain media types which are acceptable for the response.
+
+If no Accept header field is present, then it is assumed that the client accepts all media types. If an Accept header field is present, and if the server cannot send a response which is acceptable according to the combined Accept field value, then the server SHOULD send a 406 (not acceptable) response.
+
+http://api.jquery.com/jQuery.ajax/
+
+The type of data that you're expecting back from the server. If none is specified, jQuery will try to infer it based on the MIME type of the response (an XML MIME type will yield XML, in 1.4 JSON will yield a JavaScript object, in 1.4 script will execute the script, and anything else will be returned as a string). The available types (and the result passed as the first argument to your success callback)
+
+examples:
+<pre>
+curl -v -H http://demo.redmine.org/issues.json
+-> 200 + json OK!
+
+but
+curl -v -H ""Accept: application/json"" http://demo.redmine.org/issues
+-> 500 no builder for format
+
+expected (with patch)
+-> 200 + json output
+</pre>
+
+in some cases html is returned even if json was requested
+
+2/ 406 error raises exception
+<pre>
+curl -v http://demo.redmine.org/issues.xxx
+-> 406 + exception ActionController::UnknownFormat
+
+expected (with patch)
+-> 406 no exception
+</pre>
+
+3/ csrf protection - useful to avoid exceptions because of site-scanner bots
+<pre>
+curl -v -H ""Accept: text/javascript"" http://demo.redmine.org/issues/new
+-> 422 + exception ActionController::InvalidCrossOriginRequest: Security warning: an embedded <script> tag on another site requested protected JavaScript.
+
+expected
+-> 400 - no exception
+</pre>"
+26656,Search Assignee,Yulia Ploshevsky,Closed,Is duplicate of #21662,"Hello,
+
+It will be very useful to have search for assigners when editing issue. I have a bunch of people I need to pick from, and a search as in watchers can be great. "
+26653,REST API - Add full CRUD support for News,Guillaume Masclet,Closed,Related to #13468,"To date, as I see on [[Rest_News]], the current _News_ resource of the REST API is read-only, in prototype status.
+
+Could you add missing CRUD operations to this resource (create, update and delete) ?"
+26641,Display and export project information,Randa Bustami,Closed,Is duplicate of #29482,"can we have report display all project information as  table  including custom fields  and can be exported to excel
+
+"
+26639,Enabling creating issue within the project regarding the subproject,Yulia Ploshevsky,Closed,Is duplicate of #12704,"Hey,
+
+Im managing many projects, which do not have trackers as they are something general. 
+Under each project I have a lot of subprojects, in which I do have trackers for issues creation. 
+I would like to be able to create an issue straight from project (*without* accessing the subproject), but the issue *must be* related to specific subproject
+Is it possible to create such option? I could not find any info regarding it. 
+
+Thanks "
+26553,Overly restricted number of ReST results,Michael Gerz,Closed,Is duplicate of #16069,"Currently, ReST queries are limited to 100 elements.
+
+This makes it impossible to, e.g., retrieve all users in one query.
+
+Given today's computing power, please check whether the limit can be lifted.
+
+A proposal is given in the attached patch."
+26529,Email notification when watcher is added and removed,Cacilda de Miranda Lira,Closed,Is duplicate of #1757,Allow observers to be warned when they are inserted or removed from a task.
+26527,Show previous comment version when editing an issue comment,Robert Barnebeck,Closed,Is duplicate of #12388,"I am able to edit an issue comment. I want to give this right to the other users too. But currently there is nowhere a hint that the comment has been edited. The disadvantage is that a user can manipulate a conversation and nobody gehts knowledge of that.
+
+It would be great if I could see how often a comment was edited and the user can have a look to the previous versions. If too hard, the small, but helpful alternative would be, to show the amount of edits and the author/time of the last edit."
+26494,Add ability to enable\disable multiple columns on project list page,Максим Цуприк,Closed,"Related to #26853, Is duplicate of #29482",Currently all project list  displays on multiple columns. What about to add abbility to disable this feature? 
+26467,expand & collapse gantt chart list,Randa Bustami,Closed,Is duplicate of #6417,"can you make the gantt chart list expandable and can be collapsed? so we can focus om a specific  issues?
+ "
+26409,Show assignee on gantt,Go MAEDA,Closed,"Related to #27672, Blocked by #20481","Needless to say, assignee is important information to manage projects. It would be great if assignee is displayed on gantt.
+
+I have found some similar requests on the forum:
+
+* message#51259
+* message#28056
+* message#33695"
+26358,Change unit of time for time tracking,César DJ Caësar 9114,Closed,Is duplicate of #877,"For the moment, the time spent is measured in hours.
+I'd like to customize it, to be able to set ""seconds"" or ""days"" for example.
+
+Could it be possible to have a parameter in project or global Redmine configuration to set a unit of time tracking?"
+26357,Checking time tracking even if no hour spent,César DJ Caësar 9114,Closed,Is duplicate of #9090,"For the moment, we can only access the time tracking of a tracker if we have at least 1 hour spent.
+The problem is that I don't count time spent in hour but in days, and I created custom fields.
+The users sometimes put the real amount of hours spent, and sometimes ""0"", because they indicate that they spent ""X"" days.
+
+Is it possible to access the time tracking of a tracker even if we have no hour spent on it?"
+26327,Redmine Should have Defeult Categories for Project trackers. See description.,Stweard Mackenzie,Closed,Is duplicate of #1278,"Redmine should allow users to define project's default Categories (so, the user does not have to be creating the default ones for every project)... For example, i use the Category Field for specifying that the users is a Data, Design, Functionality, Usability, or any other needed for the project.. so, if i would like not to have be type it every time i create a project or sub, i want to be able to define it in an administrative module.
+
+Thanks in Advance."
+26326,Adanced relation handling for Issue Import,Robert Barnebeck,Closed,Related to #28213,"As in Ticket #25799 mentioned, there would be a little improvement for the ticket import via CSV useful: We want to use ticket imports for new projects, where we have our standard tickets. But we don´t need all of these tickets for every new project. When deleting some rows, the relational row-link to the parent ticket can change. So it would help to relate to a defined ID-Column or something, where the ID doesn´t change, even if rows are deleted inbetween."
+26184,wiki page in project top page,sachin banugariya,Closed,Is duplicate of #26554,"hello,
+i want to add my specific project wiki page as my redmine home page with dropdown option with that wiki name.
+
+or if not possible in dropdown list then also ok i directly get on my home/my page of redmine with other redmine home page block.
+
+thanks."
+26165,API for Redmine configuration & information,César DJ Caësar 9114,Closed,Is duplicate of #9912,"Hello,
+Is it possible to have an API allowing to get info (Redmine Version, environment, SCM, plugins, etc.) of a Redmine instance, and also to get and set the configuration (the ""settings"" page)?
+
+For instance, I have to code an node app differently depending on the version of the Redmine instance."
+26077,Add project Icons,Bartłomiej Ekiert,Closed,"","Hi.
+
+Please create an new project page view. I wish to add an images for projects. 
+
+The project can be presented like in the attached file.
+
+Best regards
+Bartłomiej Ekiert
+"
+26033,"Respect ""Objects per page"" option when displaying forum replies",Go MAEDA,Closed,Related to #26030,Replies per page in forum is fixed to 25 by REPLIES_PER_PAGE constant (source:tags/3.3.3/app/controllers/messages_controller.rb#L31). But I think it should respect Setting.per_page_options like other features.
+25810,Add #ID into Import Feild for update issue properties,Jack Black,Closed,Is duplicate of #23448,"When I use Import menu, I found the Import menu only can create issues, couldn't update exist #ID issues.
+Sometime when I out of network, I have to update data via csv files. When I back to network, it will a mass of issues need me update, That is very inconvenient.
+
+So I thought, if add #ID into Import Feild mapping, the Import will support update exist #ID issues.
+The expect result view may like attached import.png."
+25799,Issue Import - Dynamic Parent pasks,Robert Barnebeck,Closed,"Related to #28213, Is duplicate of #22701","We use the issue import feature in Redmine when we have a new project. In every project there is a bunch of issues, which cover typical tasks (design, deployment, accounts, testing e.g.). These tasks are connecetd between each other via parent task. We´d like to connect the issues directly with the import. But we cannot insert the explicit issue number, because the parent issues don´t exist before import. And the second reason is that we want to us the import file as template, so there cannot be specific numbers.
+
+Useful would be a kind of dynamic link between the issues. Maybe one column in the import file represents a local ID, which can be used for the dynamic parent task link."
+25792,Add Rest API for activity,Mao H,Closed,Related to #14872,"I couldn't get the activities from the api. The ""Activity"" is the information shown in the tab in the website.
+
+When I tried to query like 
+<pre>
+curl http://server/pm/projects/12/wiki.json -H ""Content-Type: application/json"" -H ""X-Redmine-API-Key:<my key>""
+</pre>
+I don't get the any values back. The server's log shows:
+<pre>
+tarted GET ""/pm/projects/12/activity.json"" for 192.168.1.6 at 2017-05-08 21:33:27 -0700
+Processing by ActivitiesController#index as JSON
+  Parameters: {""id""=>""12""}
+  Current user: anonymous
+Filter chain halted as :check_if_login_required rendered or redirected
+Completed 401 Unauthorized in 7ms (ActiveRecord: 1.8ms)
+</pre>
+
+It seems like ActivitiesController does the authorization differently. By ""differently"", I mean it's different from other controllers such as those for issues. For example, when I query the issues like this:
+<pre>
+curl http://server/pm/projects/12/issues.json -H ""Content-Type: application/json"" -H ""X-Redmine-API-Key: <my key>""
+</pre>
+
+It can return the values and the server's log shows
+<pre>
+Started GET ""/pm/projects/12/issues.json"" for 192.168.1.6 at 2017-05-08 21:35:16 -0700
+Processing by IssuesController#index as JSON
+  Parameters: {""project_id""=>""12""}
+  Current user: <my name> (id=7)
+  Rendered issues/index.api.rsb (12.3ms)
+Completed 200 OK in 142ms (Views: 11.7ms | ActiveRecord: 25.6ms)
+</pre>
+
+The user is definitely authorized for activities, as I can view them from the website. And it's seems like it is doing the authorization differently for the api."
+25779,cannot know who delete issue,Randa Bustami,Closed,Is duplicate of #18027,"we don't know who delete issue, can we add a notification mail to the project manager notify him that user ""x"" delete an issue  from the project at ""date""+"" time""
+ "
+25776,Automated Plugin installer,Kamil .,Closed,Is duplicate of #24611,"It would be great if Redmine could support Plugins installation in a ""Wordpress"" manner, where user can browse a plugin from a repository (or simply uploads ZIP file) and Redmine does the rest.
+"
+25768,Group hierarchy,Trường Đặng,Closed,Is duplicate of #7774,"I have three groups of beneficiaries: Mobile developer, iOS developer, Android developer.
+I wish the filter to 'iOS developer' it will include 'Mobile developer' but not include  'Android developer'"
+25746,Spent time - CUSTOM fields - permissions,Jenda Benda,Closed,Is duplicate of #31859,"Dears,
+
+first of all thanks a lot for all the effort!
+
+We really appreciate ""Issue custom fields permissions"" possibility settings.
+
+Could you please implement the same feature/approach for ""Spent time custom fields""? I believe this could help a lot for many redmine users and the approach/code could be reused.
+
+We need to hide some custom fields for some users, could be also helpful if some would be mandatory during specific stages/statuses of the issue with correlation to user's permissions, etc.
+
+Do you understand our needs? Any questions please? Can I help you somehow with this?
+
+Thanks a lot
+Kind regards
+jb"
+25651,How to make specified item of two custom fileds can be linked.,膺升 陳,Closed,"","Hi all,
+
+I got another request that need all you help,please refer to details as below,
+For example,
+1.Create two custom fields.One with item A,B,C and another one with item E,F,G,H,I,J.
+2.If we choose item A in one custom field,we expect that only item E and F can show up 
+in another custom field,how to implement it?"
+25650,How to make one custom field automatic counting based on due date changed.,膺升 陳,Closed,"","Hi all,
+
+I got a new request and that need all you help,please refer to details as below,
+1.Create a new custom field.
+2.Make custom field automatic counting based on due date changed,
+i.e.if default value of custom field is 0 and will be updated to 1 if due date changed once,and so on.
+"
+25578,Import spent time,jarde page,Closed,Is duplicate of #28234,"I think it should be great to have a way to import spent time, something similar to the way you can import issues.
+"
+25562,restricting the number of files a user can upload,ucp support,Closed,Is duplicate of #18556,"Hi,
+
+By not restricting the number of files a user can upload, the users may
+upload numerous large files to exhaust the resources available. This may cause a potential Denial of Service (DoS) scenario
+
+How to limit the number of files a user can upload or how to monitor how many files a user uploaded?
+
+Thank you"
+25542,Custom Fields available over the API,Tobias Zimmermann,Closed,Is duplicate of #18875,"Hi Guys,
+
+the /custom_fields.json is not available for normal project members.
+
+I have to validate several custom fields before submit, because redmine reject the issue if custom fields don't match the right values. 
+
+Please make the custom_fields available for projects with the restriction to the members, so that i can set custom fields in the right way.
+
+Regards Tobias"
+25512,Favicon for a project (avatar for a project),Bartłomiej Ekiert,Closed,Is duplicate of #5973,"Please add to new release of redmine 3.3.x a new element for the Project List. I need to add icons to a each project, like a avatar."
+25454,Add bulk edit after save hook,Serghei Zagorinyak,Closed,Is duplicate of #8757,"Correct me if I'm mistaken, but now there only exists a @issue_bulk_edit_before_save@ controller hook. This makes it impossible to provide consistent behavior for plugins implementing edit_after_save controller hooks.
+
+Say, a user edits an issue via issue view and triggers a @issue_edit_after_save_hook@ which handles the issue in a proper way. The same is expected to happen when an issue is edited via context menu (right click) in any multiple issues view, but there is no way to provide that as @bulk_edit@ method is called for context menus and there is no @issue_bulk_edit_after_save@ hook which makes @issue_edit_after_save@ hook useless.
+
+I think it would be useful to have something like this in issues#bulk_edit controller method:
+
+<pre>
+def bulk_edit
+  ...
+  @issues.each do |orig_issue|
+    ...
+
+    begin        
+      Issue.transaction do          
+        call_hook(:controller_issues_bulk_edit_before_save, { :params => params, :issue => issue })          
+        issue.save!          
+        call_hook(:controller_issues_bulk_edit_after_save,  { :params => params, :issue => issue })          
+      end        
+    saved_issues << issue
+    rescue ActiveRecord::RecordNotSaved => e        
+      unsaved_issues << orig_issue
+    end
+
+    ...
+  end
+  ...
+end
+</pre>
+
+Hope someone can make a proper patch out of this or provide a better way of managing after_save hooks for bulk edit. Thanks."
+25381,Allow project selection when editing timelog entries,Nick Vanpraet,Closed,Is duplicate of #588,"When you go to create a new time entry, and there's nothing project or issue related in the URL, you're given a project selection dropdown.
+
+This patch adds that same project selection dropdown when editing a timelog entry. Also duplicates the javascript that's run on new entries and changes it so it also works with existing time entries so the type of hours, etc get updated when changing projects.
+
+The need for this crops up when project managers have to fix time entries logged on the wrong projects.
+
+This patch is for Redmine version 3.3.2-stable"
+25300,Merging issues,Mateusz Batok,Closed,Is duplicate of #7997,"User story:
+Sometimes people in team are creating different tickets for the same problem. Moreover in both tickets I see useful information. To avoid copying data from one issue to another, assigning as duplicated etc, I'd like to have posibility to marge selected issues.
+It can be available in issues report under right mouse  button.
+
+"
+25288,Add links to spent time report table elements,Maxim Krušina,Closed,Is duplicate of #29042,"When working with spent time report, I would like to be able to click on tickets, versions and other elements - just like on any other page in Redmine."
+25112,"In Ticket-Queries the ""new"" field ""total spent time"" is forgotten as totals-checkmark - see screenshot",Oskar Schmidt,Closed,Is duplicate of #21450,""
+25061,default value for user_custom_field,Tommy Nicolamarino,Closed,Is duplicate of #15358,"Hi Everyone
+
+In attachment I sent the screen when I created my issue ,I created a custom user field called ""REFERENTE EDFS"" I want for each project , set default values of this list(i.e.  project 1  referente edfs (tommy and alex) , project 2 referente edfs ( Mike and john) ecc...
+
+Thanks in advance 
+
+Tommy
+
+"
+25054,Enforcing Strong Password in Redmine,Babu J,Closed,Is duplicate of #4221,Enforcing Strong Password in Redmine for the admin users so new user can be created with strong password credentials 
+25012,"Allow both '.' and ',' decimal symbols for input of float custom fields",Stephane Evr,Closed,Related to #22024,"In Redmine, inputting decimal values such as ""3.15"" of ""3,15"" in either ""Estimated time"" or ""Spent time"" fields is correctly interpreted and converted back to the proper float format: 3.15 .
+
+I think this behaviour should also be applied to float custom fields."
+24943,Issue watchers to have groups in addition to users,Simon Cruise,Closed,Is duplicate of #4511,"Currently each user must be selected one by one to be added to a watcher list.
+
+What I propose is that this list also could contain groups.
+
+In our business we have a large team and generally we would like to add ~10 watchers per issue. This would be a great time saver and avoid accidentally leaving out individuals."
+24942,"Additional ""Group by results"" option for parent task",Simon Cruise,Closed,Is duplicate of #5325,"The way our issues are organised is that all issues belong to a parent task, each release has a parent for all of the major items.
+
+We then have a summary search view which currently has a search for Parent set to none which allows only the parent tasks to be displayed.
+
+To view all subtasks related to each feature the user is forced to click into the parent and view in there or else perform a search for items with that Parent.
+
+To improve the user experience for our use case it would be really helpful if the Group by results would have the Parent Task option."
+24883,Subscribe to a version / Watch a version,Tobias Fischer,Closed,Is duplicate of #8046,"It would be nice if we could watch a version / subscribe to its changes.
+
+Meaning: If a new ticket is assigned to the version I watch, I will receive an email notification.
+
+Would make it easier to follow milestones in big OpenSource projects (like Redmine)."
+24841,Hide projects user is only admin but not has assigned any role in the project overview (as it is already done in the project dropdown),Johann Stein,Closed,Is duplicate of #29482,"Dear developers,
+
+currently redmine lists all projects on the projects page if a user is admin of a redmine instance.
+
+I think it might be more sensible to hide the projects the user is not a regular team member of.
+We use Redmine in our organisation and have currenty 90 projects.
+There are several admins assigned via the LDAP attribute and it works quite fine.
+
+Though, if the number of projects increases, the project overview page renders quite useless because you will effectively be unable to find your projects.
+Ok, the own projects are highlighted by a little yellow star. But I think it might be quite helpful to hide the projects I have administrative access to per default and show these on demand.
+
+Maybe I can assist you on implementing this behaviour but I need a advise where to start from.
+Organisations and companies with a large user base and an elaborated project structure might be very grateful.
+
+Thank a lot in advance!
+
+J. Stein"
+24836,Option to disable file upload,Babu J,Closed,Is duplicate of #8168,How to restrict the file type upload in Redmine because the security team has raised an vulnerability 
+24817,Files download log,Mehmet Aydemir,Closed,Is duplicate of #13798,"I want to view download log of uploaded files at project files. The log must be contains user, file and download time. "
+24806,Possibility to hide Issue History from a role,Arnaud Pissot,Closed,Is duplicate of #12089,"Hello,
+
+In my company we have a Redmine shared with some partners, we are working on projects with them to implement some features on our products for specific customers, etc.
+We discuss with our partners in the History of the issue by adding notes and they respond.
+
+Actually we want to give access (in restricted view, no edit) to our customers their projects but we don't want customers to see the discussion with our partner, so disable the Issue history for them.
+
+
+Is it possible by any way to do it ?
+I think it would be great to implement this in the ""Roles and permissions"" as there is already an option for hiding Wiki History to a role like in the screenshot attached.
+
+Thanks !"
+24792,support bulk update state of version.,Steven Wong,Closed,Is duplicate of #13315,"sometime I need to update the state of many version. Could redmine support bulk update the state of version. 
+
+for example, I check some version and click one button to update the state of version."
+24772,Set note as private is bulk edit mode,Pierre Maigne,Closed,Is duplicate of #22368,"Hello,
+
+Sometimes, we want to add the same private note to multiple issues. Unfortunately, when you bulk edit issues, the checkbox to set the note as private is not present.
+
+It would be good if we could set the private flag when using the bulk edit mode to add a note to multiple issues.
+
+Thank you"
+24764,Search in subprojects,Arnaud Pissot,Closed,Is duplicate of #9909,"Hello,
+
+In my company we're actually using (recently) a project called ""Bugtrack"" which have different subprojects for different products/specific cases,
+before adding new issues, support team have to perform a search to see if the bug hasn't been reported yet.
+
+The actual problem is that we want to search on the main project ""Bugtrack"" to search in any subproject of this one but we can't.
+A feature that allows with an option or whatever to search in a project and his subprojects would be very helpful to us !
+
+Maybe other users are interested by this feature ?
+
+Thank you !
+Arnaud"
+24677,Include in Subproject's filter a option 'is not',Clarice Pales,Closed,Is duplicate of #15773,A option 'is not' in Subproject's filter woud be a very helpful. The selection's shape current requires many actions that will replaced by this option. 
+24636,All issues private - Setting by project,sachin jain,Closed,Is duplicate of #9432,"We have some projects which require the issues to be private, and others where it is desirable to have the issues public.
+
+Is this something we can configure currently?(Redmine 3.3.1.stable)?
+
+If not, what's the best way to implement this?
+
+Thanks!!
+"
+24629,"Add option to decide default value for ""I don't want to be notified of changes that I make myself""",Rene H,Closed,"Related to #14574, Related to #21503, Is duplicate of #34787","It looks to me that the option *""I don't want to be notified of changes that I make myself""* is set by default, and there is no way to revert this.
+
+This is specially an issue with users that get automatically created by the rdm-mailhandler.rb-script.
+
+Please add an option either to settings->authentication->Default values for new users, or a parameter in the rdm-mailhandler.rb-script."
+24585,Hide Members,Patrick P,Closed,Is duplicate of #7224,"Hey Guys,
+
+it is possible to hide the ""Members"" container in project overview?
+
+
+Thanks in advance"
+24550,Open GANTT for more than 24months,Bastian Lüttig,Closed,Is duplicate of #14654,"Hi,
+
+we have projects that run for more than 24months and it is necessary to print a gantt chart over the whole project.
+I'd like to increase it.
+
+I suppose, changes necessary are in:
+lib/redmine/helpers/gantt.rb
+
+line 68: replace 24 by any number you like. Maybe we can make this a setting?
+Additionally, the PNG generation needs some adaptation to fit the entire sheet on one page (font size, month/year shortened to month/2-digit-year)"
+24529,"change sort order for due date column on ""Issues assigned"" page",Jesús M. Navarro,Closed,Is duplicate of #6034,"As per message#49589, I'd want to see either default date sorting changed or the ability to set it on-demand.
+
+If I'm requesting issues to be sorted by due date, it means due date is of importance to me, so issues with an assigned due date should be somehow highlighted over those without (i.e.: by sorting before).
+
+Not having an assigned due date on an issue means I don't know/it doesn't matter and, again, known info should prevail over _""don't knows/doesn't matters""_.
+
+Excluding in the query issues without due date may make sense sometimes but I can think of a lot of scenarios when it doesn't (i.e.: multifilter: I still want to see issues at critical priority sorted before any issues at normal priority, even if no due date is assigned to them).
+An issue can have an implicit due date as long it has a target version assigned (that of the target version).
+
+I can't think of an user case where things with no due date should be meaningfully presented before those with a due date when sorting ascending order.
+
+So, in sorting by due date (ascending), I would expect issues sorted like this:
+* 1/MAR/2016
+* 2/MAR/2016
+* no due date [or have it set to its target version's one and sort accordingly]
+"
+24438,Ability to add issue to a version within the roadmap,Christian Skjetne,Closed,Is duplicate of #5005,"So roadmaps is pretty good, but it would be nice to have the ability to add a issue regarding the version on the roadmap page itself. 
+
+kinda like here
+
+!https://dl.dropboxusercontent.com/s/ey644ee8ksf1ovz/2016-11-23%20at%2019.54.png!"
+24319,Last assigned to option in the Assignee selection list,Luka Lüdicke,Closed,Is duplicate of #16045,"Very often in the flow of working on an issue you want to assign the issue to the last person which had the ticket.
+
+My suggestion is that below the _<< me >_ option a second special option with the label
+<pre>
+<< last: account_anme >>
+</pre>
+
+should be added.
+
+I call this ""giving back"" the _Ping Pong Feature_ ;-)
+
+
+What do you think about this feature request?
+
+We have working code in our plugin to implement this. It requires a change of the @principals_options_for_select@ application_helper and a method in the issue model which returns the id of the last assignee, based on the Journals.
+
+and could implement a patch for this."
+24286,Multiple Asignee ticket,Adam Liszkai,Closed,Is duplicate of #12579,"Currently Redmine can assign to user or group a ticket, but it would much usefull to assign multiple users or groups to a ticket (if it's enabled). At my company we don't have specified groups for each type of task and we creating groups on the fly when some issue are submited.
+
+We dont want to create bunch of groups for the possible combinations because the ticketing system lack of an important feature, and this should be implemented into the core without use of a plugin."
+24067,Total Estimated Time should be available on Totals options,Valdir Stiebe Junior,Closed,Is duplicate of #21450,"The _Total estimated time_ and _Total spent time_ are missing from the _Totals_ options on query filters. See the attached image.
+
+This would be useful when working with subtasks grouped by target version. So we can sum the total estimated time on subtasks, not only directly estimated time.
+As a workaround we are using the filter _Parent Task_ with the operator _Any_ to sum the subtasks estimated time.
+
+Redmine 3.3.0 (bitnami install) here."
+24065,Commit message shouldn't be rendered by Markdown or Textile,Sharuru Zhang,Closed,Related to #22758,"Hello, our team is using Redmine 3.30 and git as VCS.
+GitExtension is the default git client.
+
+Recently, we changed our project text formatting from Textile to Markdown, the problem happened:
+
+*The commit message in 'Repository' will rendered as Markdown format as well.*
+
+---
+Reason:
+
+When merging a branch in GitExtension, it will automatically generating a commit message like the following:
+
+<pre>
+# Conflicts:
+#	path/to/conflict/file
+#	path/to/conflict/file
+#	path/to/conflict/file
+</pre>
+
+---
+
+Compared with some other website(such as GitHub, Gitlab etc...)
+
+They didn't treat these commit message as Markdown, just raw plain text.
+
+---
+
+Environment:
+  Redmine version                3.3.0.stable
+  Ruby version                   2.2.5-p319 (2016-04-26) [x86_64-linux]
+  Rails version                  4.2.6
+  Environment                    production
+  Database adapter               Mysql2
+SCM:
+  Subversion                     1.8.10
+  Mercurial                      3.1.2
+  Bazaar                         2.7.0
+  Git                            2.1.4
+  Filesystem                     
+Redmine plugins:
+  no plugin installed
+
+
+
+
+"
+23973,One user - multiple LDAP backends,Michal Kalwig,Closed,"","Hello,
+
+Is there a way to configure Redmine so that he will use 2 LDAP servers (2 DCs) in case of failure of first one? I am trying to create high availibility application but without this function I cannot ensure that. DCs must be also rebooted, patched etc.
+
+Please let me know. I tried multiple ways: white space in field ""host"", dot, comma, semicolon. Nothing worked. Always error of:
+<pre>
+getaddrinfo: Temporary failure in name resolution
+</pre>
+
+I'm using Redmine 3.3.0.
+
+Thanks in advance!
+
+Michał"
+23855,Target version filter should get an entry 'All open versions',Robert Schneider,Closed,"Related to #21577, Is duplicate of #23215","_This is my request #10412-20 as an own issue:_
+
+The filter for target versions should also get another entry so I can choose all open versions with a single selection. This could be helpful if you consider that filters can be stored in queries."
+23789,Enable External links,Luis Serrano Aranda,Closed,Is duplicate of #8734,"I think an interesting new feature is the enabling optional  of the External links in redmine.
+
+It's a feature that is required in some projects"
+23778,default sort email reminders by due date (and list due date in email),John Simmons,Closed,"Related to #6357, Related to #31225","I think this should be default behavior.  I've already written the code to do this, but I'm not sure how to get the code to you since the [contribute](http://www.redmine.org/projects/redmine/wiki/Contribute) page says not to use pull requests.  What is the preferred method of getting the code to you on github?  I see the link to creating patches on git, but I didn't really follow it.  Can someone give me a more detailed explanation?
+
+I uploaded a file of what our email reminders look like now after the changes."
+23747,Per-tracker Issue Categories,Luiz Moura,Closed,Is duplicate of #9306,"Redmine issue categories let you organize issues. Being able to auto-assign new issues to a specific user based on the chosen category is great.
+
+But these categories are set for the whole project. What if these categories should apply to one specific tracker?
+
+This plugin allows you to specify a tracker for each category. Making the issue category list shorter, the issue form is cleaner and it helps the user to avoid mistakes."
+23739,"Add ability to ""Duplicate"" / ""Save as"" custom queries",Maxim Krušina,Closed,Is duplicate of #3319,"Now, when I want to add a new custom query, which should be based on an existing one with just some slight changes, there is no way how to duplicate and/or save as modified version as a new query"
+23529,Calculate parent Issue's done ratio from subtasks in case of 'Use the issue status',Haihan Ji,Closed,Is duplicate of #6609,"Admin -> Settings -> Issue Tracking:
+> Calculate the issue done ratio with => 'Use the issue status'
+> Parent tasks attributes : % Done => Calculated from subtasks
+
+If I set NEW is 0%, CLOSED is 100%.
+When all subtasks are closed, the parent issue still is 0% (status is NEW).
+But I hope it be 100%.
+
+Can you add a switch? Force calculate the parent done ratio from subtasks?"
+23493,Add group results by due date,Olivier Jacquet,Closed,Is duplicate of #13803,Currently it is not possible to group results by _due date_. For planning purposes this would be nice.
+23491,Author name in mail from,Roman Belyakovsky,Closed,Is duplicate of #5913,"This feature was already discussed in #5913 and #2406 is but still missing in the current version. As it's the way ""github"":http://github.com issues notifications I've decided to push this patch.
+
+<pre><code class=""diff"">
+--- app/models/mailer.rb        (revision 15732)
++++ app/models/mailer.rb        (working copy)
+@@ -438,7 +438,7 @@
+             'X-Redmine-Site' => Setting.app_title,
+             'X-Auto-Response-Suppress' => 'All',
+             'Auto-Submitted' => 'auto-generated',
+-            'From' => Setting.mail_from,
++            'From' => ""#{User.current.name} <#{Setting.mail_from}>"",
+             'List-Id' => ""<#{Setting.mail_from.to_s.gsub('@', '.')}>""
+ 
+     # Replaces users with their email addresses
+</code></pre>"
+23460,Changing the owner of an issue,Jess Nielsen,Closed,Is duplicate of #1739,"I would like a functionality to change the owner 
+(creator) of an issue.
+
+It would be neat if this functionality had its own
+permisson flag instead of being part of the ""Edit Issue"".
+Otherwise just include it in the ""Edit Issue"".
+
+
+In many situations you create an issue on behalf of 
+another and it would be neat if you could set the ownership 
+to be the person whom you are creating it on behalf of.
+
+Currently, I do it by changing the data directly 
+in the database... :-/
+
+
+BTW I have made a similar functionality in a customized 
+version of Bugzilla and that functionality is very often 
+used and really nice to have."
+23434,Add hook to action_menu,Haihan Ji,Closed,Is duplicate of #3568,Please add hook to app/views/issues/_action_menu.html.erb
+23403,Make default search scope configurable,Jan S,Closed,Is duplicate of #9909,"Right now the quick search box only searches the current project. In #22125 the person asking would like to have the default changed to ""current project + sub-projects"". I'd be interested in setting it to ""all projects"", while somebody else might like to set this to default to a specific project only.
+
+SO I think it would be best if the admin could set the default scope of the quick search function from the admin backend."
+23348,Values of version type custom fields should be grouped by project/subproject,Christophe Portier,Closed,Is duplicate of #15902,"Project B is a subproject of project A.
+
+The available versions of project A are 1.0 and 1.1.
+The available versions of project B are 1.0, 1.1 and 1.2.
+
+All versions are shared with project tree.
+
+Creating a new issue in project B, ""Target version"" field shows:
+!TargetVersion.png!
+
+""Found in version field"" shows:
+!FoundInVersion.png!
+
+It would be much better if ""Found in version"" values would be presented the same as ""Target version""."
+23327,Visually mark closed subprojects on parent project page,Maxim Krušina,Closed,Is duplicate of #23152,"There is a list of subprojects on a parent project page. Thats absolutelly ok, but It would be nice to have some visual way to mark which are closed (different color, pictogram, etc.)."
+23229,Email notification based on custom field value,Aniss El Amrani,Closed,Is duplicate of #10614,"Hi all,
+
+Is there any way to define a custom field as a list of email + value ? and if the custom field value has changed in some issues an email is sent the corresponding email ?
+
+eg : 
+Custom field named GROUP with the following values:
+email    | group name|
+a@eg.com | g1        |
+b@eg.com | g2        |
+c@eg.com | g3        |
+
+
+In the issue, we can select the group. When we select the group : g1, an email is sent to a@eg.com.
+
+Is there any way to do this ?
+
+Thanks for help.
+
+Regards, 
+
+Aniss"
+23216,"Issues List, Enhanced Filtering - Allowing Multiple Queries & ""OR""-type constraints",James H,Closed,"Is duplicate of #4939, Is duplicate of #10999","Some of our biggest ""problems"" that causes us to look elsewhere for a solution are:
+
+* there is no way to use an ""OR"" clause.
+* there is no good way to search for multiple issues (its possible to select multiple trackers, statuses, etc. but it is not possible to select multiple subjects nor is it possible to define separate filters per selected filter (e.g. different assignee for each selected tracker) and other similar use cases).
+
+-------
+
+One proposed solution:
+I think one of the ""more simple"" methods of adding this feature would be to add a way to define multiple sets of ""queries""/filters in one search:
+
+Ex. you need to search for two types of issues at once. Tracker A that are assigned to Paul and Tracker B that are assigned to John. You need to see both of these side-by-side to be able to compare the due dates between the two and take action as needed.
+You define your first ""query""/filter by filtering for Tracker: ""A"" and Assigned to: ""Paul"". After that, you click a ""+"" icon below the filter/options that adds another set of filter/options and you can define your second ""query""/filter by setting Tracker: ""B"" and Assigned to: ""John"". Click apply and it will run both queries, distinct & union the result set and display accordingly. The displayed columns would be shared between all issues.
+
+This could also lead into some sort of combined custom query searching capability if that is something you guys want to explore.
+
+----"
+23211,"Issue filter menu should have different logical operators like ""AND"", ""OR"", ...",iransamin.ir sabasa,Closed,Is duplicate of #4939,"Filtering issues would be more helpful if the filter menu had different logical operators like ""AND"", ""OR"", ..."
+23210,"""Updated by"" filter is needed",iransamin.ir sabasa,Closed,Is duplicate of #17720,"When filtering issues, it is very helpful to have a filter named: ""Updated by"" to list issues changed or updated by some team member(s)."
+23079,Same Repository to differents projects,mole mole,Closed,Related to #9703,"If you want have the same repository in different projects you need to duplicate the data in mysql tables. It's a good feature if you can create a repository and you can associate to multiple projects.
+
+Thanks"
+22997,Administrative calendar,Haihan Ji,Closed,Is duplicate of #7079,"Not only Sat. and Sun don't work. For example.
+2016-06-09 is the Dragon Boat Festival of China.
+That mean's Chinese don't work from 2016-06-09 to 2016-06-11,
+but they have to work at 2016-06-12 (Sunday).
+So, I hope admin can set which non-workday need to convert workday , 
+and which workday don't need work.
+And make it effective In gantt view, or calculate workdays."

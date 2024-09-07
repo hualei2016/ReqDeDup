@@ -1,0 +1,91 @@
+Index1,Issue1 ID,Issue1 Subject,Issue1 Description,Index2,Issue2 ID,Issue2 Subject,Issue2 Description,Embedding Corr,LLM Probability,Analysis,New Requirement
+9,1680,Make version description multiline and textilizable,"Made Version description support Textile markup to be in-sync with Trac milestone description (supporting its Wiki markup).
+We needed this for migrating our projects from Trac, and it appears others need it also, e.g. #1256.
+
+Contributed by Texuna Technologies.",3,654,The i18n of the help ,"This is an example of the i18n of the help.
+
+original http://redmine.rubyforge.org/svn/tags/0.6.3
+",0.5248227168451436,10%,"The two requirements are quite different in nature. The first one is about enhancing the version description field to support multiline and Textile markup, which is related to improving compatibility with Trac migrations and enhancing text formatting capabilities. The second requirement pertains to the internationalization (i18n) of the help documentation within the system, focusing on translating or localizing the user assistance content. Since they address distinct features—text formatting and localization—they should not be marked as duplicates.",Not applicable since the probability of duplication is less than 70%.
+14,2568,Description for issue statuses,"We have the problem that users are not always sure what the semantic of a certain status is and what status they should set for a ticket when updating it.
+
+Therefore it would be nice to be able to add a documentation to issue statuses, especially when introducing custom statuses. The documentation could then be presented to the user as a tooltip when selecting a status for a ticket.",4,684,Add journal count on issues list,"I think that viewing journal count is better than nothing.
+Because it is easy to understand issues's activity.
+so I make this patch.",0.5009113902169107,5%,"The two requirements are quite distinct and do not relate to the same feature or improvement in the system. The first ticket is about adding descriptions to issue statuses for clarity, while the second ticket suggests displaying the number of journals (activity logs) for issues on a list view. These are separate enhancements aimed at improving different aspects of issue tracking—understanding status semantics versus issue activity at a glance.","Not applicable since the probability of duplication is very low. However, if we were to imagine a scenario where these could somehow be combined, it might look like this:
+
+** Subject: Enhance Issue Tracking Transparency with Status Descriptions and Activity Indicators
+
+** Description: To improve user understanding and workflow efficiency, implement two complementary features: 
+1. Allow administrators to add descriptive tooltips to each issue status, particularly custom ones, explaining their meaning and guiding users on when to apply them. This will ensure consistent use of statuses across the platform.
+2. Display a journal count on the issues list view, indicating the level of activity for each issue. This will give users an immediate insight into how actively a ticket has been worked on without needing to open it, enhancing the overall visibility of issue progress and engagement."
+14,2568,Description for issue statuses,"We have the problem that users are not always sure what the semantic of a certain status is and what status they should set for a ticket when updating it.
+
+Therefore it would be nice to be able to add a documentation to issue statuses, especially when introducing custom statuses. The documentation could then be presented to the user as a tooltip when selecting a status for a ticket.",9,1680,Make version description multiline and textilizable,"Made Version description support Textile markup to be in-sync with Trac milestone description (supporting its Wiki markup).
+We needed this for migrating our projects from Trac, and it appears others need it also, e.g. #1256.
+
+Contributed by Texuna Technologies.",0.5587199102244673,5%,"The two requirements are addressing different aspects of a system. The first one focuses on enhancing the user understanding of issue statuses through documentation and tooltips, while the second one is about modifying the version description field to support multiline and textile formatting, specifically for migration compatibility and enhanced formatting capabilities. Since they tackle distinct features, they should not be duplicated.",Not applicable since the probability of duplication is below 70%.
+18,3568,"New view-hook in contextual ""(action) menu"" in issues show view","As proposed in this forum-thread (message#7093) it would be nice if we could (at least) add items to these contextual ""menus"" using plugin hooks.
+
+I'd suggest to interpret the proposal done in the forum as: ""please add a hook like @:view_issues_show_contextual@"".
+
+Regards,
+
+Mischa.",14,2568,Description for issue statuses,"We have the problem that users are not always sure what the semantic of a certain status is and what status they should set for a ticket when updating it.
+
+Therefore it would be nice to be able to add a documentation to issue statuses, especially when introducing custom statuses. The documentation could then be presented to the user as a tooltip when selecting a status for a ticket.",0.5172098519420762,0%,"The two requirements are completely different in nature. The first ticket is about enhancing the functionality of a system, likely a project management or issue tracking tool, by adding a new plugin hook for customizing contextual menus within the issue view. The second ticket, on the other hand, pertains to improving user guidance by allowing descriptions or tooltips to be added to issue statuses to clarify their meaning. There is no overlap in functionality or purpose between the two requirements.",Not applicable since the probability of duplication is 0%.
+19,3848,Permission to log time for another user,"This patch allows the current user to record the time spent by another one, as you can see in attachment:timelog1.png and attachment:timelog2.png I wrote this patch because my co-workers are too -lazy- busy to update their issues ;)
+
+I never programmed in Ruby before this patch, so feel free to rewrite it at your convenience. Maybe an exception should be thrown in the controllers if the current user tries to edit a time entry he is not allowed to, even if it is already checked in the views.
+",5,877,ability to vary the units used to track time,"Some development methodologies suggest tracking time in points or even ""tomatoes"" (http://www.tecnicadelpomodoro.it).  It would be nice if Redmine had the ability to support these forms of time tracking.",0.5160936046872969,5%,"The two tickets address different aspects of time tracking within a system like Redmine. Ticket1 focuses on permission control, allowing one user to log time on behalf of another, while Ticket2 is about the flexibility in the units used for time tracking, suggesting alternative methods beyond standard hours (e.g., points, pomodoros). Since they tackle distinct features, they should not be marked as duplicates.","Not applicable since the probability is less than 70%. However, if we were to imagine a scenario where these were combined due to some misunderstanding:
+
+** Subject: Enhanced Time Tracking Flexibility and User Permissions
+
+** Description: This feature request aims to enhance the time tracking functionality in two ways. First, it would enable users to log time on behalf of others, addressing scenarios where team members might be unavailable to update their tasks亲自. This would include safeguards to ensure proper authorization checks both at the view and controller levels to maintain data integrity.
+
+Secondly, the system would be adapted to support various units for time tracking, going beyond the conventional hours and minutes. Users could choose to track their work in alternative units such as points, to align with specific project management methodologies, or utilize ""tomato"" units popularized by the Pomodoro Technique. This enhancement would provide teams with more tailored and versatile options for quantifying their work efforts."
+23,4511,Allow adding user groups as watchers for issues,"Having the nice user group feature in Redmine 0.9, it would be very handy to be able to add whole group as observers for issues. Currently, only user accounts can be added as observers.",10,1737,autowatch issues,"i'd very much like to have a feature similar to Patch #222. that is, a per-user option to:
+
+* ""auto-watch issues i've modified"" (i.e., autowatch if i create or modify an issue)
+* ""auto-watch issues assigned to me""
+
+Unlike Balazs (author of Patch #222), i'd want users to be able to choose their own ""autowatch"" policy.
+
+Other than Patch #222, I couldn't find any other mention of this feature. Are there plans to implement it?",0.5368007963526455,20%,"The two tickets address different aspects of issue watching in Redmine. Ticket1 focuses on adding user groups as watchers, while Ticket2 suggests a personal preference setting for auto-watching issues based on individual actions like creating, modifying, or being assigned to an issue. Although both are related to issue watching, they serve distinct purposes within the system.","Not applicable since the probability of duplication is less than 70%. However, if合并考虑，新需求可能关注于更广泛的观察者自动化和群体管理功能：
+
+** Subject: Enhanced Issue Watching Automation & Group Management
+
+** Description: Enhance Redmine's issue watching capabilities by incorporating both group-level and personal automation preferences. This includes allowing administrators to add entire user groups as watchers for issues and implementing a per-user settings feature where users can opt-in to automatically watch issues they've created, modified, or been assigned to. This enhancement will streamline notification processes and ensure all relevant parties are kept informed without manual intervention."
+23,4511,Allow adding user groups as watchers for issues,"Having the nice user group feature in Redmine 0.9, it would be very handy to be able to add whole group as observers for issues. Currently, only user accounts can be added as observers.",12,1757,Immediately send a notify email when a user is added to issue's watcher list,"Hi, Jean-Philippe, it is a great feature that you add the watcher list to the issue. By this feature, we are now able to select the members who should receive notify email about an issue.
+
+But I think it would be more useful that redmine could send a issue's summary info to the watcher when he is added to the list. Do you think so?",0.7090704143593299,10%,"The two requirements address different aspects of the issue tracking system in Redmine. The first ticket focuses on extending the functionality to allow adding user groups as watchers, while the second ticket suggests an improvement to the notification process when a user is added to the watcher list, specifically asking for an immediate notification email with issue summary. They are related but not duplicates, as one deals with the entity being watched (user groups) and the other with the notification process for individual users.","Not applicable since the probability of duplication is below 70%. However, if we were to consider enhancing the overall watching and notification system, a combined suggestion might look like this:
+
+**Subject**: Enhance Watcher Management and Notification for Issues
+
+**Description**: Improve the issue tracking system to support both adding entire user groups as watchers and implementing an immediate notification system. This would include:
+- Allowing administrators and authorized users to assign user groups as observers for issues, leveraging the existing user group feature for more efficient management of issue notifications.
+- Implementing a mechanism that sends a summary notification email to individual users immediately upon their addition to an issue's watcher list, ensuring they are promptly informed about the issues they are now monitoring."
+24,4569,Cannot add new version if all versions are closed (from issues page),"With feature #4315 new versions can be added from the issues page. However, if all of the existing versions are closed, the Target version field does not appear and therefore this feature is not available. It would be nice for this option to be available, otherwise it defeats the purpose of this change.",9,1680,Make version description multiline and textilizable,"Made Version description support Textile markup to be in-sync with Trac milestone description (supporting its Wiki markup).
+We needed this for migrating our projects from Trac, and it appears others need it also, e.g. #1256.
+
+Contributed by Texuna Technologies.",0.5124424719444702,10%,"The two tickets address different aspects of the version management feature. Ticket1 focuses on the ability to add new versions when all existing ones are closed, while Ticket2 is about enhancing the version description field to support multiline and textile formatting. Since they tackle separate functionalities, they should not be marked as duplicates.","N/A (Since the probability is < 70%, there's no need to combine the requirements.)"
+25,4939,List of tasks filtered as OR and not AND,"Hello
+
+Up to now in the list of task you can filter upon some values but the list of filters are 
+List of tasks that has
+filter1=value1 AND filter2=value2 AND filter3=value3
+
+I think it could be interesting to have the possibility of
+List of tasks that has
+filter1=value1 OR filter2=value2 OR  filter3=value3
+
+Do you think it is possible? thank you",6,1140,Filtering using more than one instance of each field,"I would like to filter issues using more than one instance of each field.
+Example:
+issues with subject containing ""email"" but not containing ""server""...",0.6336000244467357,20%,"The two tickets both address improvements to the task filtering system, but they are asking for different functionalities. Ticket1 requests the ability to filter tasks using logical OR instead of the current AND logic. In contrast, Ticket2 seeks to use multiple instances of each filter field with potentially different criteria (e.g., contains X but not Y). While related to filtering, these are distinct features and should not be considered duplicates.",N/A (Probability < 70%)
+26,5005,"""New issue"" link near roadmap issue lists.","Context menu added to roadmap list at r3547 is nice.
+
+It would be great if there is a link to new issue near roadmap list. When the link clicked, the user will see new issue form with target version is selected.",18,3568,"New view-hook in contextual ""(action) menu"" in issues show view","As proposed in this forum-thread (message#7093) it would be nice if we could (at least) add items to these contextual ""menus"" using plugin hooks.
+
+I'd suggest to interpret the proposal done in the forum as: ""please add a hook like @:view_issues_show_contextual@"".
+
+Regards,
+
+Mischa.",0.541367402405958,10%,"The two tickets address different aspects of the application. Ticket1 focuses on adding a ""New issue"" link near the roadmap issue lists to simplify the process of creating a new issue pre-populated with a specific target version. Ticket2, on the other hand, suggests implementing a new plugin hook to allow customization of the contextual action menus in the issues show view. While both tickets deal with enhancing usability through additional functionality, the changes they propose affect different areas and functions within the system.",Not applicable since the probability of duplication is low.

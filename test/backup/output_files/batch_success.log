@@ -1,0 +1,43 @@
+Processing: in - test/input_files/req_batch_input1.json, out - test/output_files/req_batch_output1.json
+Elapsed time: 703.2711 seconds
+
+Processing: in - test/input_files/req_batch_input2.json, out - test/output_files/req_batch_output2.json
+Elapsed time: 1410.9162 seconds
+
+Processing: in - test/input_files/req_batch_input3.json, out - test/output_files/req_batch_output3.json
+Elapsed time: 2045.3501 seconds
+
+Processing: in - test/input_files/req_batch_input4.json, out - test/output_files/req_batch_output4.json
+Elapsed time: 2717.1644 seconds
+
+Processing: in - test/input_files/req_batch_input5.json, out - test/output_files/req_batch_output5.json
+Elapsed time: 3344.8151 seconds
+
+Processing: in - test/input_files/req_batch_input6.json, out - test/output_files/req_batch_output6.json
+Elapsed time: 3988.9537 seconds
+
+Processing: in - test/input_files/req_batch_input7.json, out - test/output_files/req_batch_output7.json
+Elapsed time: 4601.7138 seconds
+
+Processing: in - test/input_files/req_batch_input8.json, out - test/output_files/req_batch_output8.json
+Elapsed time: 5234.4934 seconds
+
+Processing: in - test/input_files/req_batch_input9.json, out - test/output_files/req_batch_output9.json
+Elapsed time: 5873.1525 seconds
+
+Processing: in - test/input_files/req_batch_input10.json, out - test/output_files/req_batch_output10.json
+Elapsed time: 6496.0775 seconds
+
+Processing: in - test/input_files/req_batch_input11.json, out - test/output_files/req_batch_output11.json
+Elapsed time: 7118.0282 seconds
+
+Processing: in - test/input_files/req_batch_input12.json, out - test/output_files/req_batch_output12.json
+Elapsed time: 7734.9806 seconds
+
+Processing: in - test/input_files/req_batch_input13.json, out - test/output_files/req_batch_output13.json
+Elapsed time: 8309.4930 seconds
+
+Processing: in - test/input_files/req_batch_input14.json, out - test/output_files/req_batch_output14.json
+Elapsed time: 8910.2608 seconds
+
+Exit

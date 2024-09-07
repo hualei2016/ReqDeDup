@@ -1,0 +1,1681 @@
+﻿#,Subject,Author,Status,Related issues,Description
+41203,RGPD Compliance,YoZ Art,Closed,Related to #28882,"I'm trying to figure out how to be RGPD compliant in Redmine.
+
+When you delete a user, it will set everything own by this user as ""Anonymous"". Anonymyzing data is a way of being RGPD compliant but I can't delete all users obviously.
+
+Instead of that, I would like to have a feature that will anonymize everything which is older than XXX months.
+
+Do you see a way of doing it ? I dind't found any plugin, nor existing feature in Redmine. Is it something planned ? That you are discussing about ?
+
+Otherwise, any idea how I can perform this (in SQL maybe - do you have a table/field list that I can use to perform this ?)"
+41202,Change the default CSV export encoding to UTF-8,Go MAEDA,Closed,"","This patch changes the default encoding for CSV exports from @:general_csv_encoding@ to UTF-8.
+
+UTF-8 is now the standard encoding format and is crucial for exporting data with multiple languages or Unicode emojis to prevent character corruption. Therefore, using UTF-8 is the best choice in most cases.
+
+Currently, Redmine defaults to @:general_csv_encoding@ (ISO-8859-1 for English, CP932 for Japanese) for CSV exports, requiring users to manually select UTF-8 each time, which is inconvenient. Switching the default to UTF-8 will simplify this process.
+
+The default was originally set to @:general_csv_encoding@ for compatibility with older versions of Excel, which didn’t support UTF-8. However, modern Excel versions can read UTF-8 encoded CSV files with a BOM. Since Redmine’s UTF-8 exports include a BOM (see #7037), changing the default to UTF-8 will not affect Excel compatibility.
+
+!{width: 400px; border: 1px solid grey;}.clipboard-202408291800-amyv5.png!
+"
+41151,[view-customize plugin] I want to control the items displayed in the pull-down menu.,rito matsu,Closed,"","I want to use the redmine-view-customize plugin to display pull-down custom fields.
+The following code works in my local environment, but did not work when written to Redmine.
+If there is an error in the code or the use of the plugin, please let me know.
+I am having trouble understanding how to check the logs.
+
+
+*path-pattern*
+>/issues/[0-9]+
+
+*project-pattern*
+>/sandbox
+
+<pre><code class=""javascript"">
+$(document).ready(function () {
+	var parentField = 'issue_custom_field_values_1';
+	var childField = 'issue_custom_field_values_2';
+  
+	var narrowChildField = function() {
+	  	var optionList = [
+			{parent: 36, children: [57, 59, 60, 20]},
+			{parent: 42, children: [59, 61]},
+			{parent: 43, children: [60]},
+			{parent: 0, children: [57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 20]}
+		];
+	  
+	  	var parentId = parseInt($('#' + parentField + ' > option:selected').data('select2-id'), 10);
+	  	if (isNaN(parentId)) {
+			console.error(""Invalid Children ID."");
+			return;
+	  	}
+	  
+	  	var selectedOption = optionList.find(o => o.parent === parentId);
+		var childIds = selectedOption ? selectedOption.children : [];
+  
+	  	$('#' + childField + ' > option').each(function() {
+			var childId = parseInt($(this).data('select2-id'), 10);
+			if (isNaN(childId)) {
+			  console.error(""Invalid child ID for option:"", $(this).text());
+			  return;
+			}
+		
+			if (childIds.includes(childId)) {
+			  	$(this).show();
+			} else {
+		  		$(this).hide();
+			}
+	  	});
+	};
+  
+	// 初期ロード時にフィルタリングを適用
+	narrowChildField();
+  
+	$('#all_attributes').change(function(e) {
+		if (e.target.id === parentField) {
+			narrowChildField();
+	  	}
+	});
+  
+    if (typeof replaceIssueFormWith === 'function') {
+		var _replaceIssueFormWith = replaceIssueFormWith;
+		replaceIssueFormWith = function(html){
+			_replaceIssueFormWith(html);
+			narrowChildField();
+	  	};
+	}
+});
+  
+</code></pre>
+
+
+Thank you in advance for your help."
+41053,"Add ""User's group"" and ""User's role"" filters to Spent time list",Go MAEDA,Closed,"","I suggest adding ""User's group"" and ""User's role"" filters to the Spent time list. Currently, there is a filter for ""User"", but it would be beneficial to filter by the user's group or role as well.
+
+""User's group"" and ""User's role"" filters are already available in the issues list, and having the same functionality in the Spent time list would be useful. For example, these filters would make it easier to list the time entries of a specific department within an organization.
+
+!{width: 952px; border: 1px solid grey;}.clipboard-202407241039-f2ps2.png!
+"
+40913,Add bulk lock/unlock feature to user list context menu,Mizuki ISHIKAWA,Closed,"","Currently, to lock multiple users, you need to select multiple users, click ""Delete"" in the context menu, and then click ""Lock"" at the bottom of the delete page. This process is not intuitive.
+I propose adding a bulk lock option directly in the context menu on the user list.
+!{width: 400px; border: 1px solid #ccc}bulk_lock.png!"
+40901,Disable custom query links while loading to prevent multiple requests,Mizuki ISHIKAWA,Closed,"","In scenarios where custom queries involve complex conditions, accessing the destination via the query link might take some time. During this waiting period, users might click the link multiple times, causing unnecessary server load. To prevent this, we propose adding the :disable_with option to the link.
+This feature will disable the link once it is clicked and preventing multiple submissions. This approach not only enhances the user experience by reducing confusion but also helps maintain optimal server performance.
+
+For more information on the :disable_with option, you can refer to the official Rails documentation https://api.rubyonrails.org/v5.0/classes/ActionView/Helpers/UrlHelper.html#method-i-link_to
+
+The following code can be used to add disable_with:
+<pre><code class=""diff"">
+diff --git a/app/helpers/queries_helper.rb b/app/helpers/queries_helper.rb
+index 453149436..47f7db0f2 100644
+--- a/app/helpers/queries_helper.rb
++++ b/app/helpers/queries_helper.rb
+@@ -507,7 +507,8 @@ module QueriesHelper
+                       link_to(query.name,
+                               url_params.merge(:query_id => query),
+                               :class => css,
+-                              :title => query.description) +
++                              :title => query.description,
++                              :data => { :disable_with => query.name }) +
+                         clear_link.html_safe)
+         end.join(""\n"").html_safe,
+         :class => 'queries'
+
+</code></pre>
+"
+40864,Upgrade jQuery UI to 1.13.3,Go MAEDA,Closed,"",https://blog.jqueryui.com/2024/04/jquery-ui-1-13-3-released/
+40853,Upgrade jQuery to 3.7.1,Holger Just,Closed,"",There are no security issues since the current version 3.6.1. It's just a bugfix / feature update.
+40851,ask for patch of Gantt: right and left resizable panel for Redmine 3.3.3,Jimmy Gong,Closed,"","I tried to apply change_to_right_and_left_resizable_panel_v2.patch in #20481 to my Redmine 3.3.3, but seems the files content have been changed, and it can't be patch directly even though I modified the file path in patch file to be corresponding with the path of my redmine installed.
+then, I tried modified my redmine files' code according to the modification content in this patch file, and restart redmine(subversion,mysql, apache), but left side of gannt is not resizable yet. seems this modification is not suitable for Redmine 3.3.3."
+40829,Expose project updated_on column and filter in project query,Felix Schäfer,Closed,"","It is sometimes helpful to query recently changed projects, for example to look for changes in a project's custom field and update external applications accordingly.
+
+This patch adds the `updated_on` attribute to the list of available columns and filters in issue queries. We understand that ""updated"" for a project might lead to confusion because it could also be understood as ""something in the project has changed"" and not just ""the project itself was changed"". The addition of the ""last activity"" in #23954 should help understand the difference between the 2 values though."
+40706,"Enhance ""Last activity"" column to link to project activity page",Go MAEDA,Closed,Related to #23954,"This patch enhances the ""Last activity"" column in the projects list, which was implemented in #23954, to include a link to the project's activity page. This addition allows users to easily view the latest activities for a project with a single click.
+
+*Values in the ""Last activity"" column are linked to the project's activity page:*
+!{width: 802px; border: 1px solid grey;}.clipboard-202405171158-bsvjz.png!
+
+*You can see the latest activities with a single click on the projects page:*
+!{width: 106xpx; border: 1px solid grey;}.clipboard-202405171200-fnwk2.png!
+"
+40681,Dynamic generation of supported code highlighting languages in help section,Go MAEDA,Closed,"Related to #33859, Related to #36594","This patch changes the ""List of languages supported by Redmine code highlighter"" page in the help to be dynamically generated.
+
+Currently, if the Rouge library adds new languages, someone has to manually update a list in the file @app/views/help/wiki_syntax/code_highlighting_languages.html.erb@. This method takes time and can lead to mistakes.
+
+With this patch applied, the help page will automatically show any new languages that Rouge starts supporting. This means the list will always be up-to-date without needing manual changes.
+"
+40666,Issue Reminder Plugin problem,Mursal Gurbanli,Closed,"","Dear Redmine support team,
+
+I use  Redmine 5.0.4.stable version. I installed ""Issue Reminder"" plugin on Redmine. When i click ""Remind assignee now"" i recieve e-mail notification. But when i click to ""Remind someone later""  and remind manually i don't receive email notification. You can see screenshoot on attachment. Please help me to resolve problem.
+
+"
+40635,How to get back issues that have been deleted. ,Gco IT,Closed,"",How to get back issues that have been deleted. 
+40609,I am a Redmine user and Lover ,Mr Ahlawat,Closed,"","I want to do customisation in redmine.
+I want that when i create issue in my custom redmine then In the ticket body i want to print all the members of that particlar project in which i am creating the ticket"
+40586,Calendar view/page to add custom events,Tanaya Patil,Closed,"","Currently the calendar views show only events with tickets. For example, ticket start date and due date, etc.
+
+It will be so nice if i am able to add an event of my own which is not ticked on my redmine. For example, release dates for the project"
+40569,Add an option to send email notification when an attachment is added,Mizuki ISHIKAWA,Closed,"","Currently in the settings under ""Select actions for which email notifications should be sent"", if the ""Issue updated"" option is checked, an email notification is sent when an attachment is added to a issue. 
+However, if the ""Issue updated"" option is unchecked, and only sub-options such as ""Note added"" or ""Status updated"" are checked, then no email notification is sent when an attachment is added.
+
+It would be beneficial to have a separate notification setting for adding attachments, independent of other options. This would allow users to receive notifications specifically for added attachments without having to enable unrelated options. By implementing this, users can that they receive notifications tailored to their preferences, even if the ""Issue updated"" option is not selected.
+
+!{width: 500px; border: 1px solid #ccc}screenshot%202024-04-17%2015.46.53.png!
+"
+40556,Focus on the textarea after clicking the Edit Journal button,Yasu Saku,Closed,"","I suggest adding the feature to focus on the textarea after clicking on the Edit Journal button.
+
+Here is a simple patch as follows.
+<pre><code class=""diff"">
+diff --git a/app/views/journals/edit.js.erb b/app/views/journals/edit.js.erb
+index 96cf6b4f8..49fe4bec0 100644
+--- a/app/views/journals/edit.js.erb
++++ b/app/views/journals/edit.js.erb
+@@ -6,3 +6,13 @@ if ($(""form#journal-<%= @journal.id %>-form"").length > 0) {
+ } else {
+   $(""#journal-<%= @journal.id %>-notes"").after('<%= escape_javascript(render :partial => 'notes_form') %>');
+ }
++
++// Focus on the textarea
++(() => {
++  const $textarea = $(""#journal-<%= @journal.id %>-form .wiki-edit"");
++  if ($textarea.length > 0) {
++    $textarea.focus();
++    const textareaLength = $textarea.val().length;
++    $textarea.get(0).setSelectionRange(textareaLength, textareaLength);
++  }
++})();
+</code></pre>"
+40449,Add updated_on and updated_by fields to Issues API journal response,Thomas Hoffmann,Closed,"Related to #31505, Related to #40450","We would like to synchronize the redmine issues with our internal system via API.
+For this purpose, we fetch the issues with:
+
+
+<pre>
+curl -H ""X-Redmine-API-Key: secret"" ""https://domain.com/issues/58.json?include=children%2Cattachments%2Crelations%2Cchangesets%2Cjournals%2Cwatchers%2Callowed_statuses"" -vv
+</pre>
+
+The journal is returned but we can't determine, which entry changed. 
+Therefore, it would be helpful to not only have the created_on but also the updated_on field.
+
+The file app/views/issues/show.api.rsb needs an extra line at line 61:
+
+...
+        api.created_on journal.created_on
+	*api.updated_on journal.updated_on*
+        api.private_notes journal.private_notes
+...
+
+"
+40261,Request for delegate access to gem-sahay@perfios.com,Anonymous,Closed,"",Need access of gem-sahay@perfios.com as i am working on GEM project
+40248,Can I enable inherit member from rails console?,Cheng-Hui PENG,Closed,"","Hi there,
+
+I have too many project needed to enable inherit member. Can I enable it from rails consle just like I use command to enable module for each project?
+!clipboard-202402172122-qyzsi.png!
+"
+40190,Stop appending the utf8 checkmark parameter to form URLs,Go MAEDA,Closed,Related to #31831,"Ruby on Rails appends the ""utf8=✓"" parameter to form URLs. I propose to remove this parameter by setting @config.action_view.default_enforce_utf8@ to @false@.
+https://guides.rubyonrails.org/v7.1/configuring.html#config-action-view-default-enforce-utf8
+
+The parameter is added to prevent older versions of Internet Explorer from encoding UTF-8 strings with Latin1. But Microsoft ended the support for Internet Explorer in 2021 and Redmine also dropped support for Internet Explorer in Redmine 5.0 (#34978). So, I believe the ""utf8=✓"" parameter is no longer necessary.
+
+""What is the _snowman param in Ruby on Rails 3 forms for? - Stack Overflow"":https://stackoverflow.com/questions/3222013/what-is-the-snowman-param-in-ruby-on-rails-3-forms-for/3348524#3348524
+
+Removing the ""utf8=✓"" parameter has the following benefits:
+
+# URLs will be a bit cleaner
+# The code to handle ""utf8=✓"" can be removed
+# Problems caused by the parameter such as #31831 will never occur"
+40092,Drop FastCGI support,Go MAEDA,Closed,"","As you can see in the ""changelog"":https://github.com/rack/rack/blob/3897649e8740e560a5fa142f972121a119b26b5c/CHANGELOG.md?plain=1#L141 of Rack, the FastCGI handler has been removed in Rack 3.0.0. This means that Redmine's code to support FastCGI, which relies on @Rack::Handler::FastCGI@, no longer works.
+
+<pre>
+- Removed antiquated handlers: FCGI, LSWS, SCGI, Thin. ([#1658](https://github.com/rack/rack/pull/1658), [@ioquatix])
+</pre>
+
+It is time to remove the code that no longer works and end support for FastCGI, as FastCGI is no longer a major option for deploying Ruby on Rails applications."
+39997,Add an option to render values of Integer- and Float-format custom fields with thousands delimiters,Mischa The Evil,Closed,Related to #22024,"_This is extracted from #22024:_
+
+> Mischa The Evil wrote in #22024#note-10:
+> > Go MAEDA wrote in #22024#note-6:
+> > > The patch by Liane Hampe also adds the ability to display thousand delimiters. However, I think displaying thousand delimiters should be out of the scope of this patch. This is because not all users may agree with always displaying the thousand delimiter. Additionally, at this time, entering a value with a thousand delimiter into a custom field results in a validation error. In my opinion, the feature to display thousand delimiters should be discussed in another issue.
+> > A separate, additional feature providing a custom field option (using @field_attributes@?) to display thousand delimiters for selected @Float@ (but also @Integer@) custom fields could be nice to have in some cases when dealing with larger values, [...]
+> > However, I think that Redmine doesn't need to provide support for entering values with thousands delimiters into a custom field. It feels like overkill to me."
+39948,Add Redmine::Plugin proxy method for Redmine::Acts::Attachable::ObjectTypeConstraint.register_object_type,Mischa The Evil,Closed,Follows #39862,"Following #39862 I wonder: wouldn't it be neater to add a dedicated proxy method to @Redmine::Plugin@ (something like @Redmine::Plugin#attachment_object_type@) for @Redmine::Acts::Attachable::ObjectTypeConstraint.register_object_type@?
+This way plugin authors don't have to reach into Redmine core internals when implementing AAA(ActsAsAttachable) for their own plugin models themselves. How do other people think about this?"
+39884,Allow multiple footnotes per single word,Mischa The Evil,Closed,"","I stumbled upon this while trying to update [[RedmineInstall]] earlier today (v.336). The mention of ""2.7"" in the ""Supported Ruby versions"" column on the ""4.2"" row in the ""Ruby interpreter and supported databases"" table needs to have a reference to footnote !#1 too, but this seems in no way possible to achieve currently.
+
+This was found on redmine.org so applies to the Textile formatter. I haven't tested this with other formatters.
+"
+39863,"Enable ""+"" in the project menu tab from www.redmine.org",Marius BĂLTEANU,Closed,"",""
+39839,Delete users documentation,Donald Martin,Closed,"","Hi
+
+I see this message when deleting users ""Are you sure you want to delete this user and remove all references to them? This cannot be undone. Often, locking a user instead of deleting them is the better solution""
+
+So I've been looking to see what the references are and wether it affects our setup, I would preferably delete users than have an endless list of locked users. Looking at this link it looks to be well out of date https://www.redmine.org/projects/redmine/wiki/RedmineUsers#Deleting-a-User - can it be updated  detailing what is lost when a user is deleted?
+
+Thanks
+
+Donald"
+39806,Improve filter rendering on narrow screens by replacing the layout tables with a flex layout,Jens Krämer,Closed,"","The current query filters and options use HTML tables for the layout, which introduces issues with wide form elements on narrow screens.
+
+The attached patch which was extracted from ""Planio"":https://plan.io/redmine-hosting replaces the layout tables with a flex layout. The look and feel in desktop browsers should stay unchanged, but on narrow screens like mobile phones filter rows that previously just exceeded the screen width will now wrap to a new row.
+
+"
+39805,"Extend ""contains"" operator in ""Parent task"" filter to support multiple issue IDs",Go MAEDA,Closed,"","Under the ""Parent task"" filter, the ""is"" operator allows users to filter tasks by specifying multiple issue IDs (#30482). I propose extending the ""contains"" operator to multiple issue IDs, like the ""is"" operator.
+
+With this feature, you will be able to list all descendants issues of the specified issues. Currently, you can only list child issues of multiple issues with the ""is"" operator but there is no way to list all descendants of multiple issues because the ""is"" operator only accepts single issue ID."
+39763,Option to disable Issue Navigation or URL Parameters,Jorge Vaz,Closed,"","We request the ability to either disable the issue navigation feature or to remove the URL parameters it generates.
+
+While the navigation icons themselves are not the issue, the resulting lengthy URLs are a significant inconvenience for our users.
+
+A streamlined URL, such as @https://redmine.com/issues/1234@ is much preferred over the extended format that includes issue_count, issue_position, next_issue_id, and prev_issue_id parameters (@https://redmine.com/issues/1234?issue_count=12345&issue_position=1234&next_issue_id=1233&prev_issue_id=1235@).
+
+A user-centric setting for this preference would be ideal, but a global system setting or another effective method would also be acceptable."
+39761,Ruby 3.3 support,Go MAEDA,Closed,Copied from #38099,"Ruby 3.3.0 is going to be released on December 25th, 2023."
+39591,Change URL in automatic e-mail,Julian Jakobi,Closed,"","We would like to change the link in the automatic emails that Redmine sends to users. The current link, https://redmine.frankfurt-main.ihk.de/, is no longer up to date. The link needs to be changed to: https://ffms246/. Where can we change this in the options?"
+39579,"Drop official support for MySQL 5.5, 5.6 and 5.7",Marius BĂLTEANU,Closed,Related to #30419,"In Redmine version:6.0.0, we should display a warning during boot or on the Administration page if Redmine is using a MySQL version lower than 8.0:
+
+|_.Version|_.Release Date|_.End of life|
+|MySQL 8.0|April 19, 2018|April, 2026|
+|MySQL 5.7|October 21, 2015  |October 21, 2023|
+|MySQL 5.6|February 5, 2013  |February 5, 2021|
+|MySQL 5.5|December 3, 2010 | December 3, 2018|
+
+Cloud providers also drops support for MySQL 5.7.
+		
+		"
+39511,Auto-detection of field wrapper type when importing CSV file,Go MAEDA,Closed,"","In the CSV import settings, there are four fields that you have to set. Of these, the field separator and file encoding are auto-detected.
+
+In addition to these, I think the field wrapper could also be auto-detected, using a similar logic to that of the field separator's auto-detection.
+
+<pre><code class=""diff"">
+diff --git a/app/models/import.rb b/app/models/import.rb
+index fe3f24fab..2674606bb 100644
+--- a/app/models/import.rb
++++ b/app/models/import.rb
+@@ -65,12 +65,14 @@ class Import < ActiveRecord::Base
+ 
+   def set_default_settings(options={})
+     separator = lu(user, :general_csv_separator)
++    wrapper = '""'
+     encoding = lu(user, :general_csv_encoding)
+     if file_exists?
+       begin
+         content = File.read(filepath, 256)
+ 
+         separator = [',', ';'].max_by {|sep| content.count(sep)}
++        wrapper = ['""', ""'""].max_by {|quote_char| content.count(quote_char)}
+ 
+         guessed_encoding = Redmine::CodesetUtil.guess_encoding(content)
+         encoding =
+@@ -81,7 +83,6 @@ class Import < ActiveRecord::Base
+       rescue => e
+       end
+     end
+-    wrapper = '""'
+ 
+     date_format = lu(user, ""date.formats.default"", :default => ""foo"")
+     date_format = DATE_FORMATS.first unless DATE_FORMATS.include?(date_format)
+</code></pre>
+"
+39500,"Change the default notification option for users to ""Only for things I watch or I am assigned to""",Go MAEDA,Closed,Has duplicate #38343,"Currently, the default notification option for a new user is *""Only for things I watch or I'm involved in""* (internal_name: only_my_events) . This sends notifications when any of the following conditions are met.
+
+* The issue/object is *watched* by the user
+* The issue is *created* by the user
+* The issue is *assigned* to the user
+
+I think the default option should now be *""Only for things I watch or I am assigned to""* (internal name: only_assigned) which sends notifications when any of the following conditions are met.
+
+* The issue/object is *watched* by the user
+* The issue is *assigned* to the user
+
+This is because Redmine 5.1.0 has an auto watch for newly created issues (#38238) and the option is enabled by default for newly created users, and the behavior of the combination of auto watch and only_my_events is somewhat confusing.
+
+Consider the following scenario:
+
+# Admin creates a new user. The user has all auto watches enabled by default, and the email notification option is set to only_my_events
+# The user creates an issue. Since all auto watches are enabled for the user, they are added as a watcher
+# The user receives notifications about the issue
+# The user decides they do not want to receive notifications anymore and unwatches the issue
+# But the user still receives notifications because the notification option is only_my_events, and they are the author of the issue
+
+If the default notification option is changed from only_my_events to only_assigned, this confusion will be eliminated. Here is a scenario in this case:
+
+# Admin creates a new user. The user has all auto watches enabled by default, and the email notification option is set to only_assigned
+# The user creates an issue. Since all auto watches are enabled for the user, they are added as a watcher
+# The user receives notifications about the issue
+# The user decides they do not want to receive notifications anymore and unwatches the issue
+# The user does not receive notifications anymore because the notification option is only_assigned, and they are no longer a watcher
+
+As illustrated above, in Redmine 5.1, the behavior is more understandable if the notification option defaults to only_assigned."
+39400,Migrate Stylelint to 15.11.0,Mischa The Evil,Closed,Follows #37987,"Stylelint should be ""migrated"":https://github.com/stylelint/stylelint/blob/main/docs/migration-guide/to-15.md to the ""latest 15.x.x"":https://github.com/stylelint/stylelint/releases release."
+39238,Redirect to repositories#show after repositories#fetch_changesets to avoid the user-visible browser URL,Holger Just,Closed,"","When POST'ing to repositories#fetch_changesets, we fetch changesets and then just render the @show@ page This retains the URL of the @fetch_changesets@ action in the browser bar, e.g.
+
+<pre>
+https://redmine.example.com/projects/test/repository/demo/fetch_changesets
+</pre>
+
+
+Furthermore, the rendered page is the result of a POST and is thus not easily reloaded. Thus, I propose that instead of directly showing the repository again, we issue a redirect to the repository's show page. That way, the @fetch_changesets@ URL is not visible ion the browser's address bar and the page can be easily reloaded.
+
+This is implemented in the attached patch.
+"
+39141,Upgrade redmine 3.3.0 (windows) to latest,Gilbert W,Closed,"","Hi,
+I have a old redmine 3.3.0 windows version, and i want to upgrade it to the latest version, what is the best way? I have a Ubuntu server created to do this upgrade. 
+
+thanks and regards."
+39113,Add missing Homepage attribute in Projects API response,Vincent Robert,Closed,"","Hello
+
+I'm submitting a patch that adds the missing 'homepage' attribute in the API response when requesting projects' index.
+
+Thank you for considering this addition.
+
+
+<pre><code class=""diff"">
+diff --git a/app/views/projects/index.api.rsb b/app/views/projects/index.api.rsb
+index 03c7c0c77..1f8ff74f7 100644
+--- a/app/views/projects/index.api.rsb
++++ b/app/views/projects/index.api.rsb
+@@ -5,6 +5,7 @@ api.array :projects, api_meta(:total_count => @project_count, :offset => @offset
+       api.name        project.name
+       api.identifier  project.identifier
+       api.description project.description
++      api.homepage    project.homepage
+       api.parent(:id => project.parent.id, :name => project.parent.name) if project.parent && project.parent.visible?
+       api.status      project.status
+       api.is_public   project.is_public?
+diff --git a/test/integration/api_test/projects_test.rb b/test/integration/api_test/projects_test.rb
+index 4b0c79fae..1423b9c8f 100644
+--- a/test/integration/api_test/projects_test.rb
++++ b/test/integration/api_test/projects_test.rb
+@@ -43,6 +43,7 @@ class Redmine::ApiTest::ProjectsTest < Redmine::ApiTest::Base
+       assert_select '>status', :text => '1'
+       assert_select '>is_public', :text => 'true'
+       assert_select '>inherit_members', :text => 'true'
++      assert_select '>homepage', :text => 'http://ecookbook.somenet.foo/'
+     end
+   end
+
+@@ -57,6 +58,7 @@ class Redmine::ApiTest::ProjectsTest < Redmine::ApiTest::Base
+     assert_kind_of Hash, json['projects'].first
+     assert json['projects'].first.has_key?('id')
+     assert json['projects'].first.has_key?('inherit_members')
++    assert json['projects'].first.has_key?('homepage')
+   end
+
+   test ""GET /projects.xml with include=issue_categories should return categories"" do
+@@ -102,6 +104,7 @@ class Redmine::ApiTest::ProjectsTest < Redmine::ApiTest::Base
+     assert_select 'project>status', :text => '1'
+     assert_select 'project>is_public', :text => 'true'
+     assert_select 'project>inherit_members', :text => 'true'
++    assert_select 'project>homepage', :text => 'http://ecookbook.somenet.foo/'
+     assert_select 'custom_field[name=""Development status""]', :text => 'Stable'
+
+     assert_select 'trackers', 0
+@@ -118,6 +121,7 @@ class Redmine::ApiTest::ProjectsTest < Redmine::ApiTest::Base
+     assert_equal false, json['project']['inherit_members']
+     assert_equal false, json['project'].has_key?('default_version')
+     assert_equal false, json['project'].has_key?('default_assignee')
++    assert_equal 'http://ecookbook.somenet.foo/', json['project']['homepage']
+   end
+
+   test ""GET /projects/:id.xml with hidden custom fields should not display hidden custom fields"" do
+</code></pre>
+"
+39111,Enable Asset Pipeline Integration using Propshaft,Takashi Kato,Closed,"Related to #40137, Related to #40204, Related to #40221, Related to #40559, Related to #37748","This patch enables the Asset Pipeline in Redmine, assuming you have upgraded to Rails 7(#36320).
+
+Until Rails 6.1, Sprockets was a prerequisite for using the Asset Pipeline. However, starting from Rails 7, ""Propshaft"":https://github.com/rails/propshaft/ has been introduced as an alternative option.
+While Propshaft offers fewer features compared to Sprockets, it boasts a smaller codebase and greater clarity in its operations (eliminating the need for a JavaScript runtime). Additionally, manifest files are no longer necessary during development.
+
+Key benefits of using Propshaft include:
+
+* The ability to append file digests to file names instead of Rails3 stytle cache-busting approach involving query strings at the end of assets (expected to enhance cache hit rates).
+* Support for tasks like copying plugin assets to the public directory each time Redmine starts.
+* Compatibility with Turbo, which is almost mandatory in Rails 7 and later. (Note that Rails 7 and later deprecate rails-ujs, the current Redmine dependency.)
+
+To address potential challenges associated with introducing Propshaft, we have extended its functionality in the following ways:
+
+* We've made it possible for Propshaft to handle Redmine plugin and theme assets without requiring modification(If we use propshaft in default, we will need to modify the links to other assets in stylesheets.).
+* We've ensured that introducing Asset Pipeline does not necessitate rewriting existing stylesheets, thus avoiding major incompatibilities with Redmine themes.
+* In a production environment, rather than manually running the rails asset:precompile command before starting Rails, we now automatically check for asset updates and run precompilation as needed. (You can disable this automatic execution by setting config.assets.redmine_detect_update to false in @config/environments/production.rb@)."
+39013,WebConnect data exchange access ,Shelby Smith,Closed,"","Hello, I am trying to access the data exchange feature in WebConnect and am receiving a 403 AccessDenied/Forbidden error. Can my account settings be changed so I have access to data exchange? my WebConnect user is shelby7105. 
+
+Thanks!
+
+Shelby Smith 
+Neogen Genomics: Product Owner - Cattle "
+39003,Add css class to external links in markdown,Ulf Seltmann,Closed,Is duplicate of #20841,"Appearently there is no identifier added to external links when the renderer for wiki and tickets is markdown. Therefore plugins that add the ability to open external links in a new window cannot distinguish external from internal links.
+
+Please modify the markdown filter to add a class ""external"" to all external links.
+
+refs:
+* https://github.com/alphanodes/additionals/issues/32
+* #37713 
+* #1151"
+38948,Add user status to users list API,Tom Misilo,Closed,"","Allow for returning all users, and return the status of the user in the response."
+38858,Grant access to variablestc@skillandyou.com,Julien Marion,Closed,"","Hi !
+Would you please grant me access to this mailbox ASAP please ?
+I can provide authorisation of Fabienne Prudhomme or Sophie Le Jeune by email.
+I need to send email from it : my deadline tomorrow.
+Regards.
+Julien"
+38848,Test Sijo,Sijo Jose,Closed,"",Sijo Test
+38782,rbpdf Update,Brice Beaumesnil,Closed,"","rbpdf has been released today to 1.21.2
+I can be updated in Redmine's Gemfile.
+
+thanks
+"
+38730,Generate snake-case file name by redmine_plugin_migration,[Agileware]Haruka Asakura,Closed,"","redmine_plugin_migration must generate snake-case file name when specifying migration name as camel-case due to the consistency of the behavior, but it generates camel-case file name.
+
+So we have created the patch for fixing redmine_plugin_migration behavior.
+
+FYI: There was a similar issue that https://www.redmine.org/issues/28668"
+38710,Redmine upgrade path,Alex Cheung,Closed,"","We are current using a very old version of Redmine : Redmine 1.3.0.stable (MySQL)
+
+We would like to upgrade to a newer version.
+
+Is it possible? And can you share documentation and process to perform the upgrade.
+
+Thanks
+Alex
+"
+38637,"Want to start issue number (1) for new project, after deleting old project",Kaung  KK,Closed,Has duplicate #38642,"Hello,
+
+I would like to make Issue Number (1) for new project after creating new project.
+
+But it doesn't start number (1) for new project. It is continued starts after deleting old project number.
+
+Please kindly help it.
+
+I do not see Under the ""Projects"" section, click on ""Settings"" and then select ""Numbering"" from the dropdown menu too.
+
+Thanks"
+38585,Drop Ruby 2.7 and 3.0 support,C S,Closed,Blocks #40197,"Ruby 2.7 is EOL (https://www.ruby-lang.org/en/downloads/branches/)
+Since Redmine 4.2 supports Ruby 2.7 at most, this should also be set to EOL..."
+38527,"New issues filter operators ""has been"", ""has never been"", and ""changed from""",Go MAEDA,Closed,"Related to #3001, Related to #3586, Related to #9714, Related to #31381, Related to #38788","The attached (unfinished) patch adds new filter operators ""changed from"", ""has ever been"" and ""has never been"". The difference from the existing operators is that they check past values in the journal_details table. These new operators are available for Status, Tracker, Priority, Assignee, Target version, and Category filters.
+
+* ""changed from"": selects issues where the value has ever changed from the given value
+* ""has ever been"": selects issues where the value has ever changed from the given value, or the current value is the given value (equivalent to ""changed from"" + ""is"")
+* ""has never been"": selects issues where the value has never been the given value (the negative of ""has ever been"")
+
+Examples:
+* [Assignee][has ever been][<< Me >>]: selects issues you have been assigned in the past or are currently assigned to
+* [Assignee][changed from][<< Me >>]: selects issues that were assigned to you in the past but the current assignee is not you
+* [Assignee][has never been][<< Me >>]: selects issues that have never been assigned to you
+
+The following feature requests will be fulfilled if the operators are implemented.
+
+* ##3001
+* ##3586
+* ##9714
+* ##31381"
+38498,Not able to add new project in project tab,Mitul Jagushte,Closed,"",Project tab is not giving any option to add new project
+38495,Java API - Issue Redmine,Eliana Monteleone,Closed,"","<pre><code class=""java"">
+public String doPostIssue() throws IOException {
+
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+
+        httpclient.getCredentialsProvider().setCredentials(
+                new AuthScope(""redmine.org/issues"", 80),
+                new UsernamePasswordCredentials(""admin"", ""admin""));
+
+        HttpPost httpPost = new HttpPost(""http://www.redmine.org/issues"");
+
+        System.out.println(""executing request:\n"" + httpPost.getRequestLine());
+        HttpEntity entity = new EntityTemplate(cp);
+        httpPost.setEntity(entity);
+        HttpResponse response = httpclient.execute(httpPost);
+
+        HttpEntity responseEntity = response.getEntity();
+        String value = """";
+        System.out.println(""----------------------------------------"");
+        System.out.println(response.getStatusLine());
+        if (responseEntity != null) {
+            System.out.println(""Response content length: ""
+                    + responseEntity.getContentLength());
+            value = responseEntity.getContent().toString();
+        }
+        System.out.println(EntityUtils.toString(responseEntity));
+        httpclient.getConnectionManager().shutdown();
+        return value;
+    }
+
+    ContentProducer cp = new ContentProducer() {
+        public void writeTo(OutputStream outstream) throws IOException {
+            Writer writer = new OutputStreamWriter(outstream, ""UTF-8"");
+            writer.write(""format=json&action=new&"");
+            String payload = ""{\""issue\"": {\""subject\"": \""New Issue by Eliana\"",\""description\"": \""Some description\"",\""tracker_id\"": \""1\"",\""priority_id\"":\""3\"",\""custom_fields\"": [{\""id\"": \""1\"", \""value\"": \"""" + new Random().nextInt() + ""\""}]}}"";
+
+            writer.write(payload);
+            writer.flush();
+        }
+    };
+</code></pre>
+
+
+
+I have this response: 
+
+
+<pre>
+POST http://www.redmine.org/issues HTTP/1.1
+----------------------------------------
+HTTP/1.1 301 Moved Permanently
+Response content length: 0
+</pre>
+
+
+How should I fix it? "
+38481,Further narrow search results with issues filter,Go MAEDA,Closed,"","The attached patch adds ""Apply issues filter"" button to the search. Clicking the button will display issues in the search results on the issues page. You can further narrow the search results by adding filters on the page.
+
+Redmine's search engine sometimes returns a large number of results. However, unlike the Issues page with its powerful filters, the search engine does not offer many ways to further refine such results. This new ""Apply issues filter"" button solves the problem.
+
+""Apply issues filter"" will be displayed above the search results when the results include one or more issues. When you click the button, the issues included in the search results will appear on the Issues page. In other words, it converts the search results into an Issues list. You can then use issues filters to further narrow down your search results.
+
+By linking the search engine with the issues filter, it will be easier to find the issues you want to see.
+
+1. ""Apply issues filter"" button is displayed when the search results contain one or more issues.
+!{width: 800px; border: 1px solid grey;}.clipboard-202304210006-osgl9.png!
+
+2. Click the button to display the issues in the search results in the issues list. You can refine the result by adding other filters.
+!{width: 800px; border: 1px solid grey;}.clipboard-202304210006-3mvxw.png!
+"
+38459,"Support ""My bookmarks"" in the search",Go MAEDA,Closed,"","The search currently doesn't yet support the option for projects ""My bookmarks"" added in Redmine 4.1.0 (#31355). The ""Project"" filter already has the option ""<< my bookmarks >>"". I think it would be nice to add ""My bookmarks"" in the search as well. 
+
+* All projects
+* My projects
+* current project and its subprojects
+* current project
+
+!{width: 726px; border: 1px solid grey;}.clipboard-202304181528-wnlmo.png!
+
+!{width: 636px; border: 1px solid grey;}.clipboard-202304181534-1nmfo.png!
+"
+38456,"OR search with multiple terms for ""starts with"" and ""ends with"" filter operators",Go MAEDA,Closed,"","Currently, two filter operators ""contains"" and ""contains any"" support multiple terms. When multiple terms are given, those filters perform AND search or OR search.
+
+I propose adding support for multiple terms to ""starts with"" and ""Ends with"" operators as well. If multiple terms are given, those operators will perform OR search.
+
+Here is one of the uses of this feature. Suppose that you want to find issues with PowerPoint or PDF file attached. The result you want is the list of issues that have files whose filenames end with "".pptx"" or "".pdf"". But it is impossible to make a query to get such a result because the current ""ends with"" filter only supports a single term.
+
+If the operator supports multiple keywords, the following filter can be applied to get the result you want.
+
+!{width: 609px; border: 1px solid grey;}.clipboard-202304161138-0fzse.png!
+
+The attached patch adds support for OR search with multiple terms for ""starts with"" and ""ends with"" operators. After this patch applied, all operators except ""any"" and ""none"" for string/text filters will support multiple terms."
+38446,Support multiple multi-word phrases in the search engine,Go MAEDA,Closed,Related to #38435,"Currently, the search engine does not support multiple multi-word phrases.
+
+For example, we cannot search objects that contain two phrases ""closed issue"" and ""closed version"". If you give a search string @""closed issue"" ""closed version""@, the search engine search for objects containing three strings ""closed issue"", ""closed"", and ""version"". This is due to the behavior of @Redmine::Search::Tokenizer#tokens@.
+
+<pre><code class=""ruby"">
+Redmine::Search::Tokenizer.new(%q|""closed issue"" ""closed version""|).tokens
+=> [""closed issue"", ""closed"", ""version""]
+</code></pre>
+
+If the Tokenizer returns two tokens, ""closed issue"" and ""closed version"" for the same input, it will be possible to search for multiple multi-word phrases.
+
+"
+38435,"""contains any of"" operator for text filters to perform OR search of multiple terms",Go MAEDA,Closed,Related to #38446,"The attached patch adds a new operator ""contains any of"" for string/text filters and ""Any searchable text"" filter introduced by #38402. With this new operator, you can perform an OR search with multiple terms specified in single filter.
+
+For example, if you choose the ""Subject"" filter and specify the ""contains any of"" operator and give ""close block"" as the value, issues containing either ""close"" or ""block"" in the subject will be displayed.
+
+I believe this new OR search support in addition to the AND search added in Redmine 5.0 (#35764) will make Redmine's query system even more powerful.
+
+!{width: 576px; border: 1px solid grey;}.clipboard-202304121202-2fiuq.png!
+"
+38416,Ability to disable the priority field,Go MAEDA,Closed,"Related to #12745, Related to #35796, Related to #40860","Redmine can disable core fields such as subject, description, and assignee per tracker (#1091). However, the priority field cannot be disabled currently. The attached patch adds the ability to the priority field as well.
+
+I have been asked many times how to disable the priority field. Since Redmine's flexible issue tracking features can be used for a wide range of purposes, there are use cases that don't need the priority field. The ability to disable the priority field will make Redmine easier to use in such use cases.
+
+After applying the patch, You will be able to disable priority as well as other fields in the tracker's edit page. When the priority field is disabled, the default status is set for the newly created issue.
+
+!{width: 606px; border: 1px solid grey;}clipboard-202304071523-ze6i8.png!"
+38402,"""Any searchable text"" filter for issues",Go MAEDA,Closed,"Related to #3491, Related to #10574, Related to #14943, Related to #9180, Has duplicate #680","The attached patches add a new issues filter ""Any searchable text"". Unlike existing filters that check a specific single field, this new filter checks all text-type core fields (subject, description, notes) and searchable custom fields. For example, if you apply the filter ""[Any searchable text] [contains] [recipe]”, the issues list shows issues that contain the word ""recipe"" in the subject, description, notes, or searchable custom fields. This is almost the same behavior as the search box in the upper right corner of the page. Actually, this new filter uses @Redmine::Search::Fetcher@, the code of the existing search box.
+
+The new ""Any searchable text"" is useful when you want to find issues that contain a specific keyword but you don't know which field contains the keyword. In Redmine 5.0, you have to try one filter after another, such as ""Subject,"" ""Description,"" ""Notes"", and custom fields. With the new filter, you can find issues that contain the keyword in any of the fields in a single operation.
+
+What is different from the search box in the upper right corner of the page is that this is a filter. This means that you can further refine the result by applying other filters such as the status, assignee, and target version.
+
+!{width: 934px; border: 1px solid grey;}.clipboard-202304021708-v4fbz.png!
+"
+38372,Use Commonmarker instead of Redcarpet by default when rendering Markdown attachments,Mizuki ISHIKAWA,Closed,Related to #36807,"markdown_formatter returns 'common_mark' only when text_formatting is common_mark, and 'markdown' otherwise.
+For example, when you attach an markdown.md file and preview it in an environment where text_formatting is Textile, the contents of the file are converted to HTML by RedCarpet('markdown').
+
+Since RedCarpet('markdown') was deprecated in #36807, why not change markdown_formatter to return 'markdown' only when text_formatting is markdown and 'cmmon_mark' otherwise?"
+38368,WebP images support in PDF output,Jun NAITOH,Closed,Related to #38168,"WebP image support has been implemented in RBPDF 1.21.1 gem.
+This is a patch to support WebP images in Redmine's PDF output."
+38338,JSON formatting,Ivan Cenov,Closed,"","It looks that Redmine does not support JSON code formatting.
+
+Pressing ""code"" button produces a list and there is no ""json"" in it.
+
+It would be great to have this language added here."
+38301,"Multiple issue ids in ""Related to"" filter",Ko Nagase,Closed,"","Multiple tickets can be specified in the ""Parent Task"" at  custom query.
+> Feature #30482 Multiple issue ids in ""Parent task"" filter
+
+Similarly, this patch enable multiple tickets to be specified in the ""Related To"" field.
+(We (@tomokosimi, @sanak and @tohosaku) created this patch in Japan Redmine Patch Meetup 30th (https://redmine-patch.connpass.com/event/274438/) event.)"
+38274,Receive e-mail replies to news and news comments,Felix Schäfer,Closed,Blocked by #38273,"Currently e-mails sent in reply to notifications from news or news comments are ignored. The proposed patch adds the ability to import answers to news and news comments.
+
+This patch requires https://www.redmine.org/issues/38273"
+38273,Improve errors in MailHandler: add MissingContainer and LockedTopic exception,Felix Schäfer,Closed,"Blocks #38274, Blocked by #38263",There are some cases for which the @MailHandler@ drops incoming emails and just logs an info. This patch replaces this with a custom error to allow for plugins to more easily hook into those unhandled cases. This also unifies the logged message and the error handling in @MailHandler@.
+38265,"When the user login is via 'autologin' cookiee, then the password change, and 2fa setting flow should not get triggered",Gaurav Bansal,Closed,"","Hi All,
+
+We have added the flow of insert into the tokens table, with autologin as the cookiee. The flow is working properly if the user settings are no change password after login, 2fa disabled. But if password change is set, or 2fa is enabled, then those flow get triggered as soon as we reirect after login. Ideally if the login is via autologin flow, then these should not get triggered. So either I am doing something wrong, or this can be added as a functionality, if this is something which makes sense to the core team members."
+38263,Try importing journal replies as issue reply where applicable,Felix Schäfer,Closed,Blocks #38273,E-mails that are recognised as journal replies are currently discarded if the journal recognised from the message ID is invalid/not present anymore. This happens when a journal is deleted but may also happen when 2 redmine instances are used to send e-mails to each other.
+38238,Auto watch issues on issue creation,Felix Schäfer,Closed,"Related to #4347, Related to #38343","Similar to #4347 we propose adding an option to watch issues the user created. This would allow users to more finely control which issues they want to be notified about rather than having to select the ""only owner"" or ""only my events"" and receiving notifications for all the issues the user created. This will also allow in the future to replace the mail notification options with only having auto watching options."
+38231,Limit the year to 4 digits in date input,Go MAEDA,Closed,"","Date input fields such as Start date and Due date accept up to 6 digits as a year.
+
+The problem with this is that, for example, when the current date format is YYYY/MM/DD, the cursor automatically moves to the next DD part when a two-digit number is entered in the MM part, but not when a four-digit number is entered in the YY part. So, users should enter TAB to move the cursor from YYYY to MM. This UI inconsistency leads to erroneous input such as ""202302-01"" when you input ""2023-02-01"".
+
+In Google Chrome and Microsoft Edge, this can be improved by set `max=""9999-12-31""` to `<input type=""date"">` tags. When `max=""9999-12-31""` is set, the cursor moves from YYYY to MM immediately after you finish entering the fourth digit in YYYY. The attached patch sets `max=""9999-12-31""` to all date input fields.
+
+The disadvantage of this patch is that you will not be able to enter a year with more than 5 digits, but this should not be a problem since I think that project management rarely deals with dates 8000 years in the future.
+"
+38216,Add template filenames as comments to HTML output in development mode,Takashi Kato,Closed,"","This patch adds HTML comments to the rendered output indicating where each template begins and ends in development and test mode.
+
+This feature has been added since rails 6.1.
+
+see
+"".annotate_template_file_names annotates HTML output with template names #38848"":https://github.com/rails/rails/pull/38848
+""Add the configuration option for annotating templates with file names to the generated app #39204"":https://github.com/rails/rails/pull/39204
+
+!erb_filenames.png!"
+38168,WebP images support,Go MAEDA,Closed,Related to #38368,"""WebP image format"":https://developers.google.com/speed/webp/, introduced in 2010, are now supported by most browsers (see https://caniuse.com/webp).
+
+The attached patch adds WebP support to Redmine. The following functions will be able to handle WebP.
+
+* Inline image
+* Thumbnail of the attached image
+* Inserting markup for an image uploaded by drag and drop"
+38154,How can i create one new project by copy from template project and without tickets.,qing gu,Closed,"",""
+38134,Drop Ruby 2.6 support,Go MAEDA,Closed,"Related to #38099, Related to #31834","The normal maintenance phase of Ruby 2.7 ended on 2022-04-22 (see https://www.ruby-lang.org/en/news/2022/04/12/ruby-2-7-6-released/). And some gems dropped the support for Ruby 2.7.
+
+Redmine currently supports Ruby 2.6, but this prevents us from updating some gems such as Rouge and Capybara."
+38099,Add Ruby 3.2 support,Go MAEDA,Closed,"Related to #38100, Related to #38118, Related to #38121, Related to #38124, Related to #38134, Related to #38181, Related to #38220, Related to #39576, Copied to #39761",""
+38048,Introduce permission to set a project public,Felix Schäfer,Closed,"Related to #9029, Related to #38210, Related to #39777",In certain situation it might be desirable for project creators or project managers to not be able to change the public attribute for projects.
+37947,Export spent time id in CSV file,Christoph Holzer,Closed,"","It would be very useful, if the spent time id will be also exported to csv file."
+37878,Allow using ideographic space (U+3000) as a separator for search terms,Go MAEDA,Closed,"","The attached patch allows using ""　"" (ideographic space, U+3000) as a separator for search terms in addition to "" "" (U+0020).
+
+You can perform AND searches by separating terms with a space in the search box or issue filter. Currently, ""space"" means characters that match the regular expression `\s` in this context. It is sufficient in many cases to consider `\s` as space, but not enough in some languages at least Japanese (and perhaps Chinese). This is because they use ""　"" (U+3000) when writing text, so they often mistakenly enter U+3000 instead of U+0020 when they want to separate search terms.
+
+Actually, many services such as Google, Bing, and GitHub treat U+3000 as a separator. I think it is a small but nice improvement for those who use Redmine in languages that regularly use U+3000 if Redmine will support U+3000 as a separator for search terms."
+37856,Few Details required,Ethan Hunt,Closed,"","Hi,
+1) Want to know the difference between version 4.2.8 and 5.0.3
+2) List of plugin support by both of the version
+3) Can we install plugin omniauth_google for v5.0.3, if not can you provide other way or option
+https://github.com/twinslash/redmine_omniauth_google
+
+* Note :- Please look into it, as its urgent request
+
+Also when i tried to install omniauth_google for 5.0.3 version got below error 
+
+
+rake aborted!
+LoadError: cannot load such file -- redmine_omniauth_google/hooks
+/usr/local/rvm/gems/ruby-3.0.0/gems/zeitwerk-2.6.1/lib/zeitwerk/kernel.rb:35:in `require'
+/usr/local/rvm/gems/ruby-3.0.0/gems/zeitwerk-2.6.1/lib/zeitwerk/kernel.rb:35:in `require'
+/usr/local/rvm/gems/ruby-3.0.0/gems/activesupport-6.1.7/lib/active_support/dependencies/zeitwerk_integration.rb:51:in `require_dependency'
+/data/taskman/plugins/redmine_omniauth_google/init.rb:2:in `<top (required)>'
+/data/taskman/lib/redmine/plugin_loader.rb:31:in `load'
+/data/taskman/lib/redmine/plugin_loader.rb:31:in `run_initializer'
+/data/taskman/lib/redmine/plugin_loader.rb:108:in `each'
+/data/taskman/lib/redmine/plugin_loader.rb:108:in `block in load'
+/usr/local/rvm/gems/ruby-3.0.0/gems/activesupport-6.1.7/lib/active_support/callbacks.rb:427:in `instance_exec'
+/usr/local/rvm/gems/ruby-3.0.0/gems/activesupport-6.1.7/lib/active_support/callbacks.rb:427:in `block in make_lambda'
+/usr/local/rvm/gems/ruby-3.0.0/gems/activesupport-6.1.7/lib/active_support/callbacks.rb:198:in `block (2 levels) in halting'
+/usr/local/rvm/gems/ruby-3.0.0/gems/activesupport-6.1.7/lib/active_support/callbacks.rb:604:in `block (2 levels) in default_terminator'
+/usr/local/rvm/gems/ruby-3.0.0/gems/activesupport-6.1.7/lib/active_support/callbacks.rb:603:in `catch'
+/usr/local/rvm/gems/ruby-3.0.0/gems/activesupport-6.1.7/lib/active_support/callbacks.rb:603:in `block in default_terminator'
+"
+37807,Allow access to /robots.txt even if logins are required,Holger Just,Closed,"","Right now, if logins are globally required, the @/robots.txt@ path is not accessible for search engines since the @Welcome#robots@ path also observes this setting. Requests to @/robots.txt@ will thus receive an empty HTTP 401 in this case today.
+
+The attached patch series improves this behavior in multiple ways. The patches were extracted from ""Planio"":https://plan.io/redmine-hosting/.
+
+* @0001-Render-all-visible-projects-in-robots.txt-including-.patch@ - While initially not strictly related to the issue, this patch extends the list of projects included in the @/robots.txt@ to not only list active projects but also closed projects (which are still visible to anonymous). This ensures that the list is correct for cases where the Redmine does not enforce logins. Still, as the @/robots.txt@ file is intended to be consumed by search engines rather than logged-in users, we only list projects which are visible to Anonymous now. The @/robots.txt@ output thus does not distinguish between the project visibility of the current user but will only output projects visible to Anonymous.
+* @0002-Always-allow-access-to-robots.txt-for-Anonymous.patch@ - This patch allows Anonymous to always access @/robots.txt@, regardless of the @Setting.login_required@ setting. Previously, this would have been denied if logins are required.
+* @0003-Disallow-all-in-robots.txt-if-login-is-required.patch@ - With a required login, Anonymous should not be able to view ANY project information. Even in case some routes are manually excluded from this restriction, we still don't want those to be index by search engines. As such, with required logins, we just instruct all robots to not index anything. This patch also makes sure that we are not leaking any information about public projects in case logins are required. Before this patch (but after the previous patches), we would include a list of all public projects there, even if Anonymous could not see them without a login."
+37724,Set custom fields on state,Stefan Mueller,Closed,"","Dear all,
+is it possible to set a custom field value on reaching specific state.
+E.g.
+Reset a custom field if ticket status is reassigned to ""New""
+Thank you very much
+Best Regards"
+37679,Raise the maximum length of the last name to 255 characters,Anthony Mallet,Closed,Related to #13174,"According to r11392, the lastname length is increased to 255 characters.
+
+It seems that the user validations was never updated accordingly and I have some users hitting the limit in a legitimate way.
+
+Would the attached patch be enough to fix the issue?
+
+
+"
+37674,Upgrade Admin/Users list to use the query system,Jens Krämer,Closed,"Related to #4295, Related to #18193, Related to #21055, Related to #4023, Related to #11501, Related to #31043, Related to #38182, Related to #39181, Has duplicate #5017, Has duplicate #36659, Has duplicate #13529","This patch series that was extracted from ""Planio"":https://plan.io/redmine-hosting introduces a UserQuery
+and upgrades the Admin/Users list with corresponding filter, sort and (CSV) export capabilities.
+Also introduced are a context menu and an option to delete multiple users at once. The third patch just
+adds flash messages to the (single) user deletion operation, for symmetry with the messages rendered by the bulk delete.
+
+This relates to issues #4295, #18193, #21055 (probably there are more I didn't find)."
+37623,Add Parent task filter and column to Spent time,Micael Broun,Closed,Related to #17946,"Please, add column ""Parent Task"" to report ""Spent Time"".
+
+Devs track time to Tasks, Tasks is steps / part of decomposition to Stories. To understand, what time track for what story, i need to open all tracks and can's see it in report
+
+!https://img.serpstat.com/prayer/2022-08-30_182231_1555x907_vY5KsTtKOQ.png!"
+37621,Add field separator option to CSV export dialog,Karel Pičman,Closed,"","I would like to add a field separator option to the CVS export option form.
+
+Background:
+
+If I have set the language e.g. to English in my Redmine profile, the separator is taken from _config/locales/en.yml_ (@general_csv_separator@) and it is *comma*. If I have installed e.g. German Microsoft Office and try to open such a CSV, it expects that the separator is *semicolon*. Unfortunately, Microsoft Office doesn't offer to choose the separator prior opening a CSV file and always uses the default value.
+
+!field_separator_export_option.png!
+
+It is also related to #37581, where many translations have set @general_csv_separator@ to different value than is expected in Microsoft Office.
+
+"
+37617,Add description field to custom fields API,Holger Just,Closed,"","The description field is missing from the API response of @custom_fields#index@.
+
+The attached patch adds this field."
+37568,It should be possible to set a due date on a subtask without affecting the parent task,Stefan Mark,Closed,"","When setting a due date on a subtask, the parent tasks due date is set to same date and cant be changed later.
+
+I could understand the other way round, but just because a tasks subtask should be done tomorrow, it should not means that the parent task has to be done tomorrow. The other way round maybe.
+
+Note: this might also be Bug, but i am not sure.
+
+Redmine 5, ruby 2.7, mariadb 10 (mysql)
+
+Thanks :)"
+37532,Add CSS class for relation type to related issues list,salman mp,Closed,"","There is a function @css_classes_for@ in @IssueRelation@ but only used when displaying relation column in query results.
+It's useful to add classes in relations list in issue details."
+37530,Add timeout for thumbnail generation process,Go MAEDA,Closed,"","When @Redmine::Thumbnail.generate@ generates thumbnails, some input files can take a very long time to generate thumbnails, causing Redmine to hang.
+
+Today, in my environment, Redmine tried to generate a thumbnail for a particular PDF file and it took almost an hour (3,521,455ms) and finally raised an error. Because there were multiple accesses to the issue with the PDF attached, all processes of Redmine were occupied with the generation of a thumbnail. As the result, all other requests were not accepted and users could not see any page of Redmine.
+
+<pre>
+Creating thumbnail failed (`convert /*****/*****.pdf[0] -thumbnail 100x100> png:-` failed with error:
+convert-im6.q16: no images defined `png:-' @ error/convert.c/ConvertImageCommand/3229
+):
+Completed 404 Not Found in 3521455ms (ActiveRecord: 13.3ms | Allocations: 27136)
+</pre>
+
+The attached patch sets the timeout of @convert@ command to 10 seconds to prevent similar problems from occurring.
+"
+37514,Storing credentials in the browser,Alberto Guerrero,Closed,"","The Redmine tool is not properly defining the parameters of the login form, delegating the decision to store credentials in the user's browser to the user.
+
+This possibility, while widely used for user convenience, poses a considerable risk of allowing an attacker to steal the session and credentials of any user who stores such information in the browser of a machine compromised by an attacker or credential-stealing malware.
+
+Solution:
+
+It should be possible to set a control from the redmine configuration to always request the username and password when logging in.
+
+The code that is usually used to do this is to include the following line of code in the HTML file:
+<INPUT TYPE=""password"" AUTOCOMPLETE=""off"">
+"
+37362,CSV export of issues report,Go MAEDA,Closed,Has duplicate #15148,"CSV export of the Issues Report would help project managers create documentation on the status of their projects using spreadsheets and other applications.
+
+!{width: 935px; border: 1px solid grey;}.csv-export-of-issues-report.png!"
+37279,"Reject passwords that are the same as login, first name, last name, or email",Go MAEDA,Closed,"","Some lazy users may use their login IDs or their names as passwords. This can be a security threat.
+
+Such passwords should always be rejected."
+37167,REST API: Filter issues by multiple tracker ids,Ko Nagase,Closed,"","Currently, filtering issues by multiple tracker ids is possible with analyzing issues query filter.
+* http://localhost:3000/issues?f%5B%5D=tracker_id&op%5Btracker_id%5D=%3D&v%5Btracker_id%5D%5B%5D=1&v%5Btracker_id%5D%5B%5D=2&v%5Btracker_id%5D%5B%5D=3
+
+But building above URL path is not strait forward, and it's preferable to support like the following understandable parameter.
+* http://localhost:3000/issues.json?tracker_id=1,2,3
+* (On current trunk, this request returns 500 Internal Server Error)
+
+Attached patch file enables above simple and understandable multiple tracker ids filter issues request.
+
+Note that this patch was made by @rbt, @tohosaku, @mbasa and me from Redmine patch meetup 14th."
+37159,Drop Ruby 2.5 support,Go MAEDA,Closed,Related to #38122,"Recently, more and more of the Gems that Redmine depends on have dropped support for Ruby 2.5. Redmine still supports Ruby 2.5, but this complicates the maintenance of Gemfile.
+
+I think it is time to drop Ruby 2.5 support."
+37119,Drop redcarpet dependency for common_mark formatter,Marius BĂLTEANU,Closed,Related to #36892,"Redmine fails to start when it's installed without markdown group (#36892).
+
+We should fix this and drop the redcarpet dependency for common_mark."
+37046,How do I make the standard fields to be required,Andrew Beck,Closed,"",I see how we do it for custom and can use workflow for fields to make it required by user/tracker but I was looking for an across the board solution
+36992,redmine computed custom field,ashraf alzyoud,Closed,Related to #1712,"i think this plugin must be by default in core redmine 
+all users need it"
+36938,Update translations of field_principal to User or Group,Holger Just,Closed,"","The term ""principal"" is only used in *very* few places within the user interface and is not really defined elsewhere. In the translations, the term is only used in the @field_principal@ key.
+
+About the only place where I came across this was as a validation error when trying to add a new project member and not selecting a user or group. Here, the error message is:
+
+> Principal can't be blank
+
+As the term ""Principal"" is very obscure here, I propose we generally replace it with ""User or Group"".
+
+In the German translations, things are worse because the term is currently translated there as ""Auftraggeber"" which actually means ""client"" in a strict business sense. Here, ""Benutzer oder Gruppe"" would be more appropriate as a direct translation of ""User or Group""."
+36913,Update to Rails 5.2.7/6.1.5,Mischa The Evil,Closed,"Related to #36917, Related to #36918","From the ""RoR-blog"":https://rubyonrails.org/blog/:
+> March 11, 2022
+> ""Rails 5.2.7 has been released"":https://rubyonrails.org/2022/3/11/Rails-5-2-7-has-been-released
+>
+> March 10, 2022
+> ""Rails 6.1.5 has been released"":https://rubyonrails.org/2022/3/10/Rails-6-1-5-has-been-released"
+36908,Improve wording on password change form,Vu Nguyen,Closed,"","As changing new password, I would like to change as below for better understanding. Just change password and misunderstanding the form.
+
+*Password -> Old Password*
+New Password
+Confirmation
+"
+36891,Ask more specific confirmation questions when closing/reopening/archiving projects,Holger Just,Closed,"","The attached patch improves the usability when closing / re-opening / archiving projects by replacing the generic (and not really helpful) confirmation ""Are you sure"" with a specific question.
+
+We also remove the redundant confirmation when deleting a project from @admin/projects@. When deleting a project, we will always explicitly ask for a confirmation by requiring the user to enter the project identifier using a dedicated confirmation page.
+
+The patch should apply on current trunk @ r21522."
+36825,Increase email address length limit from 60 to 254,Brice Beaumesnil,Closed,Related to #2719,"Hello,
+
+In REDMINE, mail length is limited to 60 characters (MAIL_LENGTH_LIMIT in app/models/user.rb)
+
+To accept all mails, it could be updated to 254 characters. 
+
+(cf. https://blog.moonmail.io/what-is-the-maximum-length-of-a-valid-email-address-f712c6c4bc93)
+
+Thanks."
+36823,Allow to import time entries for issues in different projects,Jens Krämer,Closed,"","As it is now, the time entry import only allows to import time entries for a single, pre-selected project. Because time entries can only be imported for already existing issues (which in turn already belong to a project), by definition that pre-selected project is only relevant for time entries that are not attached to any issue.
+
+The attached patch that was extracted from ""Planio"":https://plan.io/redmine-hosting allows to import time entries for issues across different projects. This is achieved simply by ignoring the user-selected project for those rows where an issue id is present, letting the existing logic in @TimeLogEntry#safe_attributes=@ determine the project id.
+
+This is somewhat related to #25808."
+36771,RSS Feed of all Projects,Gernot Ploiner,Closed,"","For my Browser-Bookmarks I need a RSS/Atom Feed, which delivers a list of all Projects. With a Link to each Ticket page.
+It should be like here: https://www.redmine.org/projects
+But the Atom-Feed on this page delivers the ""newest projects"" instead of ""all projects"" as in the HTML view.
+Is there any way to get this?
+Thank you for your support."
+36765,Connect email office 365 with REDMINE,Benjamin BENABES,Closed,"","Hello, i'd like to be guided to connect an email with REDMINE.
+Can you help me ?"
+36728,Reintroduce lazy loading of i18n files,Pavel Rosický,Closed,"Related to #31384, Related to #36564, Related to #36998","this change restores a removed optimization https://www.redmine.org/issues/31384
+
+see https://github.com/ruby-i18n/i18n/pull/612
+
+<pre>
+<code class=""diff"">
+diff --git a/lib/redmine/i18n.rb b/lib/redmine/i18n.rb
+index b1066539f..13b84512f 100644
+--- a/lib/redmine/i18n.rb
++++ b/lib/redmine/i18n.rb
+@@ -157,7 +157,7 @@ module Redmine
+ 
+     # Custom backend based on I18n::Backend::Simple with the following changes:
+     # * available_locales are determined by looking at translation file names
+-    class Backend < ::I18n::Backend::Simple
++    class Backend < ::I18n::Backend::LazyLoadable
+       module Implementation
+         # Get available locales from the translations filenames
+         def available_locales
+</code>
+</pre>"
+36701,Update Chart.js to 3.7.1,Maciej Pankanin,Closed,"","Redmine is now using 2.8.0 which was released almost 3 years ago (14 Mar 2019). There are use cases in which plugin developers would want to use Chart.js but to use latest features they have to ship another js bundle.
+
+""Chart.js 2.8.0"":https://github.com/chartjs/Chart.js/releases/tag/v2.8.0
+""Chart.js 3.7.1"":https://github.com/chartjs/Chart.js/releases/tag/v3.7.1
+
+I looked into code, there are only few usages, so it should not be hard to upgrade.
+
+Also it would be nice to upgrade jQuery to latest (3.6.0 atm).
+I wonder why jQuery is shipped in single bundle with jQueryUI and Rails UJS making them harder to upgrade.
+
+"
+36699,Change the text of the user link when converting @user notation to html,Mizuki ISHIKAWA,Closed,Related to #13919,"#13919 added the Mention feature to Redmine.
+There are three types of notations that can be converted to user links: @@user@, @user#1@, and @user:user@. With this change, only @@user@ will have the Mention feature.
+
+Currently, when you convert @jsmith to HTML, you get the link ""John Smith"".
+I propose to change this to the following:
+* Plan 1. @John Smith
+* Plan 2. @jsmith(John Smith)
+* Plan 3. @jsmith
+
+Reason for change:
+* The functions are different from those of other @user#1@ and @user:user@ notations and should be separated.
+* I think it's important to have @ in front of the name so that people who don't know much about Redmine realize that they can use the Mention feature.
+
+Concerns:
+Since @jsmith has always been assumed to be converted to ""John Smith"", changing it may break the display of wiki pages and issues.
+
+Please let me know what you think."
+36696,Improve performance of adding or removing members of a group,James H,Closed,Related to #36730,"In situations where groups are applied to hundreds of projects (with or without subprojects, with or without inherit members), adding or removing a user from the group takes VERY LONG (more than 5-10 minutes).
+
+Would like to request:
+# Better querying optimization?   
+# Bulk edit capability   
+
+1. not sure how because I do not know how it queries. maybe something like consolidate multiple queries into fewer big queries?   
+2. When looking at the ""users"" tab under Groups, have a checkmark selection and ""Apply All"" button at the bottom for actions applied for multiple users at once. This way it can try to optimize the query for that?    "
+36695,Add check in Redmine information page if default queue adapter is used in production,Marius BĂLTEANU,Closed,"","Using the default queue adapter (@:async@) in production is not recommended because the queue is stored in memory and you can easily lose the items from the queue (https://api.rubyonrails.org/classes/ActiveJob/QueueAdapters/AsyncAdapter.html).
+
+Since #26791, there were multiple issues reported caused by the default queue adapter (for example: #31241).
+
+My proposal is to add the following check in Redmine information page:
+
+!{border: 1px solid grey;}.redmine_info.png!"
+36691,Background job and dedicated status for project deletion,Jens Krämer,Closed,"Related to #31076, Related to #33422, Related to #37210","Due to the deletion of dependent objects (issues etc) and child projects,
+project deletion may take a long time.
+
+This patch, which was extracted from [Planio](https://plan.io/redmine-hosting),
+moves the actual project deletion into an ActiveJob job. It also introduces a 
+new project status (SCHEDULED_FOR_DELETION) that is used to effectively hide
+the project that is about to be deleted (and any potential descendant projects)
+from the system immediately.
+
+A security notification is sent out to the user who deleted the project,
+informing about success / failure.
+
+The projects list is extended to be able to filter for the new status,
+so in case of a failure, the project can still be accessed for
+examination."
+36679,Export a version as changelog text,Go MAEDA,Closed,"Related to #1800, Related to #7043","I suggest a feature to export a version as text. One of the uses of the text is a changelog.
+
+You will be able to get the text by clicking ""Also available in: TXT"" link placed in the bottom right of the version page.
+
+If you export https://www.redmine.org/versions/5 as text, you will get the following output:
+
+<pre>
+# Changelog
+
+## 0.7.3
+
+2008-07-06
+
+Security+Bug fix release
+
+* Defect #52: bulgarian language issue
+* Defect #1426: User model does not allow person's first name to contain a dot '.'
+* Feature #1506: Add title length note and error info when creating project or creating news
+* Patch #1218: Patch for relative links to icon images in 'public/help/wiki_syntax.html'
+* Patch #1425: Entourage (and some old client) fails to correctly render notification styles
+* Patch #1524: back_url redirects inappropriately when blank
+* Patch #1527: Add Project Name to Cross-Project Atom Feed
+</pre>"
+36659,"Add ""auth_source_id"" to GET request for Endpoint /users.:format",Christoph Graf,Closed,"Related to #23307, Is duplicate of #37674","In our Redmine installation we have both local users and users from our LDAP service. It would be very helpful for our user management if we could filter for ""auth_source_id"" in a GET request for the endpoint /users.:format. 
+
+Example:
+GET /users.json?limit=100&auth_source_id=1
+
+"
+36594,Relax rouge version dependency in Gemfile,Holger Just,Closed,"Related to #33859, Related to #36325, Related to #40681","The @rouge@ gem ""claims to follow"":https://github.com/rouge-ruby/rouge/blob/master/CHANGELOG.md#changelog Semantic Versioning 2.0.0. As such, most releases of the gem in the past bumped the minor version.
+
+I think it is not necessary to bump every minor release in our @Gemfile@, thereby forcing users on older Redmine releases to stay on an older rouge version unnecessarily.
+
+As such, I think we should relax the @rouge@ dependency to something like
+
+<pre>
+gem ""rouge"", ""~> 3.28""
+</pre>
+
+As with this change, people might have different languages available (as different @rouge@ versions support different languages). Accordingly, I propose we also dynamically generate the list of highlighted languages (currently in @public/help/code_highlighting_languages.html@) with a controller action.
+"
+36557,Redmine plugin was not sync in Windows ,Kiran KR,Closed,"","Hi Team,
+I installed Redmine on a Windows PC and everything is working properly, but I can't find a plugin in Redmine. Please assist us.
+
+Kiran KR"
+36505,Reduce database queries when rendering Custom fields box in the project settings tab,Go MAEDA,Closed,"","Currently, rendering Custom fields box in the project settings tab generates SQL statements as many as the number of available issue custom fields. The attached patch improves the code to generate only one SQL statement.
+
+Before:
+<pre>
+  IssueCustomField Exists? (0.3ms)  SELECT 1 AS one FROM ""custom_fields"" WHERE ""custom_fields"".""type"" = ? AND (is_for_all = 1 OR id IN (S
+ELECT DISTINCT cfp.custom_field_id FROM custom_fields_projects cfp WHERE cfp.project_id = 1)) AND ""custom_fields"".""id"" = ? LIMIT ?  [[""ty
+pe"", ""IssueCustomField""], [""id"", 2], [""LIMIT"", 1]]
+  ↳ app/views/projects/settings/_issues.html.erb:26
+  IssueCustomField Exists? (0.3ms)  SELECT 1 AS one FROM ""custom_fields"" WHERE ""custom_fields"".""type"" = ? AND (is_for_all = 1 OR id IN (S
+ELECT DISTINCT cfp.custom_field_id FROM custom_fields_projects cfp WHERE cfp.project_id = 1)) AND ""custom_fields"".""id"" = ? LIMIT ?  [[""ty
+pe"", ""IssueCustomField""], [""id"", 1], [""LIMIT"", 1]]
+  ↳ app/views/projects/settings/_issues.html.erb:26
+  IssueCustomField Exists? (0.2ms)  SELECT 1 AS one FROM ""custom_fields"" WHERE ""custom_fields"".""type"" = ? AND (is_for_all = 1 OR id IN (S
+ELECT DISTINCT cfp.custom_field_id FROM custom_fields_projects cfp WHERE cfp.project_id = 1)) AND ""custom_fields"".""id"" = ? LIMIT ?  [[""ty
+pe"", ""IssueCustomField""], [""id"", 6], [""LIMIT"", 1]]
+  ↳ app/views/projects/settings/_issues.html.erb:26
+  IssueCustomField Exists? (0.2ms)  SELECT 1 AS one FROM ""custom_fields"" WHERE ""custom_fields"".""type"" = ? AND (is_for_all = 1 OR id IN (S
+ELECT DISTINCT cfp.custom_field_id FROM custom_fields_projects cfp WHERE cfp.project_id = 1)) AND ""custom_fields"".""id"" = ? LIMIT ?  [[""ty
+pe"", ""IssueCustomField""], [""id"", 8], [""LIMIT"", 1]]
+  ↳ app/views/projects/settings/_issues.html.erb:26
+  IssueCustomField Exists? (0.3ms)  SELECT 1 AS one FROM ""custom_fields"" WHERE ""custom_fields"".""type"" = ? AND (is_for_all = 1 OR id IN (S
+ELECT DISTINCT cfp.custom_field_id FROM custom_fields_projects cfp WHERE cfp.project_id = 1)) AND ""custom_fields"".""id"" = ? LIMIT ?  [[""ty
+pe"", ""IssueCustomField""], [""id"", 9], [""LIMIT"", 1]]
+  ↳ app/views/projects/settings/_issues.html.erb:26
+</pre>
+
+After:
+<pre>
+   (0.3ms)  SELECT ""custom_fields"".""id"" FROM ""custom_fields"" WHERE ""custom_fields"".""type"" = ? AND (is_for_all = 1 OR id IN (SELECT DISTIN
+CT cfp.custom_field_id FROM custom_fields_projects cfp WHERE cfp.project_id = 1)) ORDER BY ""custom_fields"".""position"" ASC  [[""type"", ""Iss
+ueCustomField""]]
+  ↳ app/views/projects/settings/_issues.html.erb:24
+</pre>"
+36430,sent notice to members  while objects be changed  in DMS,gb chen,Closed,"","How can the admin or owner specify a number of recipients as a consistent-property of the DMS's folders ,no matter updated or added new files in the willing DMS folders, Redmine will sent notice to the recipients automatically? 
+It would be efficient to our daily office works.
+
+under version :
+Redmine 4.1.1.stable ; DMSF 2.4.5"
+36422,ERPmine Plugin Log Time Issue ,Hemant Patidar,Closed,"","I have Installed ERPmine Plugin in our Redmine server. after log time entries not working.
+
+I have attached the log time error screenshot in attachment."
+36391,"Change the default value for ""Time span format"" from ""decimal"" to ""minutes""",Go MAEDA,Closed,Related to #23996,"The setting ""Time span format"" was introduced in Redmine 3.4.0 (#23996) and you can switch the format of time to ""minutes"", ""HH:MM"" style (""0:45 h"" instead of ""0.75"").
+
+The format ""minutes"" (""0:45 h"") is much more natural and easier to understand than the format ""decimal"" (""0.75""). However, the default value of ""Time span format"" is still ""decimal"", and some users may not know this setting.
+
+Since the minutes format is more natural and convenient for most users, I think it is better to set the ""minutes"" format as the default for newly installed Redmine instances."
+36382,Redmine Timesheets Application compatible with Redmine 4.2.3,reni wardani,Closed,"","Is it possible to upgrade Redmine Timesheets Application that can compatible with Redmine version 4.2.3 ?
+
+"
+36320,Migrate to Rails 7.2,Go MAEDA,Closed,"Related to #36317, Related to #36355, Related to #35536, Related to #39110, Related to #37732, Related to #39760, Related to #39747, Related to #39803, Related to #39834, Related to #40148, Related to #40210, Related to #41141",""
+36303,Include avatar URL in Users API,Go MAEDA,Closed,Related to #37157,"I suggest including the avatar URL in the user's API.
+
+<pre><code class=""json"">
+{
+  ""user"": {
+    ""id"": 1,
+    ""login"": ""admin"",
+    ""firstname"": ""Redmine"",
+    ""lastname"": ""Admin"",
+    ""created_on"": ""2006-07-19T17:12:21Z"",
+    ""updated_on"": ""2021-12-13T10:03:30Z"",
+    ""last_login_on"": ""2021-12-11T07:06:41Z"",
+    ""passwd_changed_on"": null,
+    ""avatar_url"": ""https://www.gravatar.com/avatar/982b6086063a22d85509455d8e31cca2""
+  }
+}
+</code></pre>
+
+Currently, it is difficult to display a user's Gravatar image when developing an application using the REST API. This is because Users API response doesn't include Gravatar URL. Although you can generate a Gravatar URL if you know the email address, email addresses are usually hidden for non-admin users.
+
+This feature is very useful for developers who are building Redmine clients using REST API."
+36294,Lazy load inline images,Mizuki ISHIKAWA,Closed,"","Set *lazy: loading* for images and thumbnail images that Redmine will display as follows:
+@<img src=""image.jpg"" alt=""..."" loading=""lazy"">@
+
+lazy loading document: https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading
+It can be displayed more quickly, for example, when a issue has many comments and many images are displayed."
+36292,get tags via API,Hervé LE BARS,Closed,"","Hello
+I'm working on Redmine 4.x, I d'ont know the X as I'm not the administrator but I would to retrieve tags values associated with an issue via the REST API. I have found no way to retrieve these tags via API and no documentation that could let me think that there is such information in a more recent version of redmine/plugin tag
+I know that to retrive comments on an issue I have to add include=journals but I did'nt find any equivalent for tags"
+36205,Ruby 3.1 support,Pavel Rosický,Closed,"Related to #36226, Related to #35435, Related to #36360, Blocked by #35025","net/* libraries were gemified, see https://bugs.ruby-lang.org/issues/5481
+
+<pre><code class=""diff"">
+diff --git a/Gemfile b/Gemfile
+index 949fe86d2..624d40216 100644
+--- a/Gemfile
++++ b/Gemfile
+@@ -26,6 +26,12 @@ gem 'tzinfo-data', platforms: [:mingw, :x64_mingw, :mswin]
+ gem 'rotp'
+ gem 'rqrcode'
+ 
++unless Gem.ruby_version < Gem::Version.new('3.1.0')
++  gem 'net-smtp', '~> 0.3.0'
++  gem 'net-imap', '~> 0.2.2'
++  gem 'net-pop', '~> 0.1.1'
++end
++
+ # Optional gem for LDAP authentication
+ group :ldap do
+   gem 'net-ldap', '~> 0.17.0'
+</code></pre>"
+36197,Add configurable setting for copying attachments when copying an issue,Go MAEDA,Closed,"","When copying an issue, you can select the following behaviors:
+
+1. whether to make a relation between source and destination issues
+2. whether to copy attachments
+
+And the former has a setting to set the default behavior (#18500). However, the latter does not.
+
+I think it should also be possible to configure the default behavior whether to copy attachments or not.
+
+!{width: 623px; border: 1px solid grey;}.setting-copy-attachments-on-copy.png!"
+35987,Time Entry  :comments text_area,L. V. Lammert,Closed,"","With Redmine 0.7.3 (MySQL), changing the text_field to a text_area in views/timelog/edit.rhtml for comments field was simple, .. but it is proving impossible to make a similar change with Redmine 4.2.1.stable.
+
+Given that it is MUCH easier to edit the comment for a time entry with a text_area instead of a scrolling line on the screen - how could this be accomplished?"
+35934,Show 2FA status in users list from administration with option to filter,Maciej Liżewski,Closed,Related to #1237,"To control how many users enabled 2fa it is required to report it somehow. This could by just ""2fa status"" in users grid and filter/sort possibility."
+35911,Automatically Get Mail from Helpdesk Plugin,Riky Andrean,Closed,"",""
+35898,add user,jagadeesh kumar,Closed,"","how to adding a user through API ,is it possible?"
+35877,We are not able to install plugin,Hemant Patidar,Closed,"","Hello Team,
+
+We are not able to install kanban plugin on redmine server. So please help me how to install plugins on redmine.
+"
+35876,We are not able to install plugin,Hemant Patidar,Closed,"","Hello Team,
+
+We are not able to install kanban plugin on redmine server. So please help me how to install plugins on redmine.
+"
+35859,Azure AD Login ,Louis Deidda,Closed,Is duplicate of #20457,"We just switched from GSuite to O365. Formerly we used LDAP auth with google but it seems not be working anymore with Azure AD.
+Am i missing something? Are there any better ways for our users to authenticate using Microsoft systems?
+"
+35815,Specifying the size of the preview image in the text,Igor M,Closed,"","h2. User history
+
+In Jira, it is possible to insert an image in the body of a comment (or wiki) in a reduced size. If you need to increase it, then you need to click and it will become large in lightbox.
+
+* This is very convenient when the description is very large (for example, a wiki). It is inconvenient to return to the attachments.
+* The size of the images can be very large. For example, I can take a screenshot from 2 monitors (they record the place, time, changes).
+
+I tried this plugin. It does as it should in attachments, and it is also necessary in the comments.
+
+!Screenshot_1.jpg!"
+35795,Settings for global and user default custom ProjectQuery,Mischa The Evil,Closed,"Related to #7360, Related to #29482, Related to #32818, Related to #36389, Related to #37135","A feature like this would be in line with #7360. It wouldn't need the project and user level defaults though. It would IMHO be a more complete (than r19505) solution to the need expressed in #32818.
+
+With this feature, the @project_list_display_type@ setting added in r19505 can be removed."
+35787,"add IP address to ""401 Unauthorized"" log messages",Dietrich Streifert,Closed,"","Hi all,
+
+I'm in need to add a fail2ban filter/jail which allows blocking of IPs trying to use the REST api unauthorized.
+
+Currently redmine logs this attempts like this:
+
+<pre>
+2021-08-20 13:18:43 +0200 (185) Completed 401 Unauthorized in 4ms (ActiveRecord: 1.5ms)
+</pre>
+
+which is not sufficient for fail2ban filters, because the IP address is missing.
+
+It would be nice to additionally display the requesting IP in that log line, e.g.:
+
+<pre>
+2021-08-20 13:18:43 +0200 (185) Completed 401 Unauthorized in 4ms (ActiveRecord: 1.5ms) from 1.2.3.4
+</pre>
+ 
+This way it would be possible to write a filter usable for fail2ban.
+"
+35770,"Change ""Edit"" label in the context menu to ""Bulk Edit"" when multiple issues are selected",Mizuki ISHIKAWA,Closed,Related to #36352,"I hadn't noticed that I could bulk edit issues and time entries for a long time.
+I think it would be easier to notice the existence of the bulk edit feature if the edit button was displayed as ""Bulk Edit"" only when multiple elements are selected in the context menu.
+Currently, it is always displayed as ""Edit"".
+
+After changes:
+|!issue-context-menu.png!|!spent-time-context-menu.png!|"
+35764,"Multiple search terms in the ""contains"" operator of text filters",Go MAEDA,Closed,"Has duplicate #33286, Blocked by #35073","I extracted the attached patch from #35073#note-4. The patch posted by ""Jens Krämer"":https://www.redmine.org/users/40856 from Planio allows you to use multiple search terms in ""contains"" operator of text filters. 
+
+> The alternative I am experimenting with right now is breaking up the user's query string into tokens like the global search does, and use these to build a query with multiple LIKE clauses that are combined with AND. I'm attaching a preliminary patch that implements this for the Issue.like scope (used by the autocompleter) and the Query#sql_contains method (which should cover all query filters). Do you think that's a viable approach?
+
+It seems that the patch has already been deployed to the production environment of Planio. See ""Planio filters just got more powerful - Planio Support &#40;english&#41; - Planio Support"":https://support.plan.io/news/200
+"
+35758,Add some space around the versions on the Roadmap,Mischa The Evil,Closed,"","Currently it somewhat looks like versions are crammed together one after another on the Roadmap. I think it would be good to give them some additional space.
+
+This can easily be accomplished with some additional CSS like:
+
+<pre><code class=""diff"">
+ public/stylesheets/application.css | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/public/stylesheets/application.css b/public/stylesheets/application.css
+index e117bc1d0..d09310581 100644
+--- a/public/stylesheets/application.css
++++ b/public/stylesheets/application.css
+@@ -640,6 +640,8 @@ div#roadmap .wiki h2 { font-size: 110%; }
+ div#roadmap h2, div#roadmap h3 {padding-right: 0;}
+ body.controller-versions.action-show div#roadmap .related-issues {width:70%;}
+ 
++div#roadmap .version-article {padding-bottom: 12px;}
++
+ div#version-summary { float:right; width:28%; margin-left: 16px; margin-bottom: 16px; background-color: #fff; }
+ div#version-summary fieldset { margin-bottom: 1em; }
+ div#version-summary fieldset.time-tracking table { width:100%; }
+</code></pre>
+
+Note: the above given diff is against trunk @ r21131."
+35755,Drop OpenID support,Go MAEDA,Closed,"Related to #35688, Related to #32293, Related to #699, Related to #36326, Related to #37609","Redmine currently supports OpenID authentication.
+
+However, OpenId was obsoleted by OpenID Connect some years ago and most OpenID providers discontinued their services. Now it is very difficult to find a web service with an OpenID provider service. This means that it is difficult for Redmine users to start using OpenID login. And it is not easy for us to test if Redmine's OpenID support is working properly.
+
+Given this situation, probably very few users are using OpenID login in Redmine. I think it is time to remove OpenID support from Redmine."
+35742,Enable task list items for CommonMark text formatting,Marius BĂLTEANU,Closed,"Related to #32424, Related to #20698","The task list extensions will be a very nice addition for Common Mark text formatting.
+
+https://github.com/gjtorikian/commonmarker#extensions"
+35683,PDF rendering improvements when exporting an issue or a list of issues,Jens Krämer,Closed,Related to #34709,"Two PDF generation improvements:
+
+1. Currently, when rendering an issue PDF, macros are only expanded in the description, but not when rendering custom fields with fulltext formatting enabled. The patch changes the behaviour so that formatted full-width custom fields are rendered in the same way the description is rendered, fully interpreting macros. The behaviour for rendering normal-width custom fields is unchanged, probably it is better to leave it as is due to space constraints.
+2. Thumbnail macro output was not rendered properly (in the issue description and elsewhere) because the thumbnail image file could not be retrieved - the second patch extends @get_image_filename@ to check for thumbnail URLs and retrieve the proper file path in that case.
+
+Both patches were initially developed for ""Planio"":https://plan.io/redmine-hosting ."
+35677,Preserve leading white space when quoting using the JS toolbar,Jens Krämer,Closed,"",the attached patch changes the quote/unquote toolbar.js regular expressions so they preserve leading spaces. This is helpful i.e. when quoting blocks of code.
+35671,Move subtasks section on issues show view into a separate partial,Mischa The Evil,Closed,"","Subject says it all.
+
+I'll attach a patch that does this."
+35661,"Allow ""Contributor"" role to manage related issues for revisions",Marius BĂLTEANU,Closed,"","I misspell the issue ID in r21131 and I wanted to manually add the issue to the revision, but I don't have rights.
+
+I think it's useful for the ""Contributor"" role to have this permission."
+35658,Administration -> Role -> Users Visibility,Sebastian Hunziker,Closed,"","In the dropdown list menu, adding ""None users"" as an option. For some approaches, It would be really useful to be able to select this option to set up a role that can be part of a project but cannot see other members.
+
+!RoleUserVisibility.png!"
+35627,Database schema,token ring,Closed,"",Please publish latest database schema
+35589,issue assignee limitation to a group or a role,Daniel Besnard,Closed,"","I have a large population in my projects >200
+The assignee dropdown menu is very long and make the proper person is made difficult and time consuming.
+
+A good improvement would be:
+in the project settings, having he possibility to define the ""assignee"" as follow:
+- all -> the entire project members (default)
+- group -> list of users within a designated group (could be more than one group selected)
+- role -> list of users within a given role (could be more than one role selected) ie: my_exerts
+
+This is not perfect as some users would require having the list of assignee to be customize base on the issue position within a given workflow. But, nevertheless, it would be a nice improvement.  
+
+best regards
+
+reference found not working with redmine 4.1/4.2 : 
+https://www.redmine.org/issues/8313
+https://github.com/luisr9/redmine_filter_assignable/blob/master/lib/Issues/patches/IssueController_patch.rb"
+35562,Show warning in admin/info when there are pending migrations,Go MAEDA,Closed,"","The attached patch adds an indication to the admin/info page whether all database migrations have been run or not.
+
+Some users forget to run the rake task @db:migrate@ when they update Redmine and encounter errors. Sometimes it is difficult for users new to Ruby on Rails to identify that the cause is that database migrations have not been run (examples: message#56635, message#62323).
+
+The new indication that the patch introduces gives such users a chance to know the cause. It is also useful for people who are asked help from such users to figure out the cause.
+
+!{width: 676px; border: 1px solid grey;}.pending-migrations-indicator.png!"
+35559,Query links for related issues on issue page,Go MAEDA,Closed,Related to #28471,"Redmine 4.2.0 and later have query links for subtasks on an issue page (#28471). I think the ""Related issues"" section should also have similar links.
+
+Although there is no filter that can extract all types of related issues as mentioned in #28471, I think the new links can be implemented by using the issue ids filter (#4806).
+
+!{width: 769px; border: 1px solid grey;}.query-links-for-related-issues.png!"
+35544,Define Workflow per Project,Gayathri Jayakumar,Closed,"","We are using Redmine for our project management with Agile Plugin.
+
+I am unable to define workflows for multiple projects. I have created status and the workflow is also defined. 
+
+Let's say for Project1 the workflow is ""InDiscussion->InDevelopment->InQA->ReadyForDeployment""
+
+I would like to create a workflow for Project2 with workflow ""Start->Approve->Done""
+
+Let me know how to achieve this.
+
+Environment:
+  Redmine version                4.1.1.stable
+  Ruby version                   2.6.5-p114 (2019-10-01) [x86_64-linux]
+  Rails version                  5.2.4.2
+  Environment                    production
+  Database adapter               Mysql2
+  Mailer queue                   ActiveJob::QueueAdapters::AsyncAdapter
+  Mailer delivery                smtp
+SCM:
+  Subversion                     1.7.14
+  Git                            1.8.3.1
+  Filesystem                     
+Redmine plugins:
+  redmine_agile                  1.5.4"
+35507,API to close/reopen projects,Go MAEDA,Closed,Related to #13725,"API to archive/unarchive projects has been implemented for Redmine 5.0.0 (#35420). I think it is better to implement API to close/reopen projects as well.
+
+This is because archive and close of a project are similar choices for admins. Depending on the situation, admins may want to archive a project, or close a project."
+35505,Add enabled core fields to /trackers API response,Jens Krämer,Closed,Has duplicate #16522,In some scenarios it might be helpful for an API client to find out what core fields a certain tracker has enabled.
+35465,Assistance to update redmine server,Fabio Almeida,Closed,"","hi there, I´m a real noob and although tried I have failed to update my server. is there any one with patience to help me out ?"
+35462,Download all attachments in a journal,Go MAEDA,Closed,"Related to #7056, Related to #37130","Bulk attachments download for issues has been implemented in Redmine 4.2.0 (#7056). However, sometimes I want to download all attachments of a journal, not an issue.
+
+For example, suppose that an issue already has dozens of files. In the most recent update, your colleague has attached 5 more files. In this case, it is not uncommon to want to download only the latest 5 files.
+
+I believe that bulk downloading of files for each journal is a very useful feature.
+
+!{width: 766px; border: 1px solid grey;}.bulk-download-journal-attachments.png!"
+35450,Better validation error message when the domain of email is not allowed,Yuichi HARADA,Closed,Related to #3369,"When registering an email address with a disallowed email domain with ""My account > Email"", the error message ""Email is invalid"" is displayed.
+
+!{width:400px;border:1px solid grey;}current-error-message.png!
+
+I don't understand what the error message wants to convey, so fixed the error message.
+
+!{width:400px;border:1px solid grey;}fixed-error-message.png!"
+35439,Option to require 2FA only for users with administration rights,Marius BĂLTEANU,Closed,"Related to #1237, Related to #34070, Related to #31920","#31920 adds the option to enable 2FA only for certain groups when the 2FA setting is set to optional. This is very useful, but it doesn't cover the case when you want to enable 2FA only for administrators. As a best security practice, if you cannot enforce for all users, the administrators should be top priority to secure using 2FA. 
+
+My proposal is to add a new setting to allow enforcing 2FA only for administrators:
+
+!{width:60%;}2fa_optional.png!
+
+What do you think?
+"
+35436,Elsevier Auditing Tool without RDP,Anonymous,Closed,"","There is plan to perform quality auditing outside or without accessing citrix or RDP environment. So to develop a tool this request is raised.
+
+"
+35432,Git: View annotation prior to the change,Go MAEDA,Closed,Related to #38526,"The ""Blame"" view of GitHub and Gitlab has a feature called ""View blame prior to this change"". With the feature, you can easily jump to an older change of the line.
+
+I think it would be useful if Redmine also has the feature. Currently, it requires some manual steps to see older changes in the ""Annotate"" view of Redmine.
+
+!{width: 634px; border: 1px solid grey;}.gitlab-view-blame-prior-to-this-change.png!
+"
+35420,API to archive/unarchive projects,Felix Schäfer,Closed,Related to #13725,""
+35374,Reduce amount of work on projects show API,Felix Schäfer,Closed,"","Most of the variables computed in the @ProjectsController#show@ action are only needed for the html view, not for the API view."
+35365,Allow sending account information when importing users,Go MAEDA,Closed,"","Currently, the user import feature (#33102) does not have a feature to send account information to newly created users. Since there is a ""Send account information to the user"" checkbox when adding users one by one from the web UI, I think there should be the same kind of feature for importing from CSV.
+
+The ""Import users"" screen already has a ""Send email notifications during the import"" checkbox (#22771, currently not working when importing users). I think it would be better if the account information is sent when this checkbox is turned on."
+35362,Issues list,Виктор Воеводский,Closed,"","Is it possible the user to see the problem only members of the group? A user ""developer"" has seen the problem of all groups.
+As part of the project are connected by different organizations. There is a need that they are not seen by the task each other. Since each organization is a separate group, it is necessary that users see only the tasks of their group. Тow there is only:
+issues_visibility_all
+issues_visibility_own
+issues_visibility_public
+"
+35358,Setup GITLAB and Redmine work together,Anonymous,Closed,"",Gitlab must use redline as a tool for tracking issues.
+35356,subtasks field,Angelica Diaz,Closed,"","Hello, is there the possibility to add ""subtasks"" field to build a query?"
+35324,Preload principal and roles in members#index,Thomas Löber,Closed,"","Hi,
+
+@MembersController#index@ should preload the principal and roles of the members.
+
+When this data is not preloaded, iterating over the @@members@ array in @app/views/members/index.api.rsb@ causes a lot of database queries.
+
+A patch is attached.
+
+Thanks,
+Thomas
+"
+35259,Output test coverage report to the console,Dmitry Makurin ,Closed,"","Redmine has its own html formatter for SimpleCow. Would be great to see ""default generated report"":https://github.com/simplecov-ruby/simplecov-html/blob/3a30b47964e74ac810edc02629d420fa1cb1bc12/lib/simplecov-html.rb#L31 in console log for LOC coverage.
+It's useful for collecting metrics in gitlab."
+35229,SSE refresh,David Doležal,Closed,"","Hi,
+I tried quite long time to developed solution how automatically refresh issue's notes without refreshing whole page.
+
+I tested soulution via AJAX or JS with refreshing only DIV ""history"" using timer. For example:
+<pre>
+$(document).ready(function(){
+setInterval(function(){
+      $( ""#history"" ).load(window.location.href + "" #history."");
+      /*$( ""#tab-content-history"").load(window.location.href + "" #tab-content-history.tab-content"");*/
+}, 30000);
+});
+</pre> 
+It doesn't work how I expacted. Page is refreshed, but notes don't show. 
+I tested for example plugin redmine_refresh.
+
+But I think it exists better way how it solved. I'm aiming on Server-Sent Event. gem ld-evensource
+
+How I imagine it can works - focused on issue-detail page:
+On server running ""services"" who listen changes on issues (create issue, update issue, ...). 
+
+If issue is new, then work as normal (like now).
+If issue is updated, then check attributes which was changed and journal has no notes, then reload div #history, show tab History and Changes
+If issue is updated, then check attributes which was changed and journal has note, then reload div #history, show tabs History, Notes and Changes and show note.
+
+Maybe I forgot some stuff.
+
+I would like to create discussion about this problem, so come to talk about it. I appreciate it. :-) Redmine is great, but this feature will send him on Olymp... :-)
+
+Feel free for question. 
+
+With best regards 
+David
+  "
+35228,Email notifications on specified filters,Dane 03,Closed,"","Dear all,
+
+is there a plugin working for latest redmine releases enabling us to create filters in 
+redmine and then sending emails in case of new entries to these?
+
+
+e.g. we have several custom fields we use. We create filters on these. 
+If a new ticket falls into this filter, we'd like to receive email notifications. 
+
+There has been the issue reminder plugin, but it seems it's not working in latest versions anymore,
+so that we now search for a plugin filling our needs.
+
+Thx
+Rgds
+Benjamin"
+35189,"New email notification option ""For any event on my bookmarked projects""",Yoann AMICHAUD,Closed,"Related to #39854, Has duplicate #15542","For now, if you want to be informed about all events of a huge projects portfolio, I have to update the list behind ""For any events of the selected projects only..."" quite often. 
+It would be really great if we can receive all notifications of the bookmarked projects adding a new option in the notification option list : ""For any events of my bookmarked projects only...""
+"
+35137,Reject CSV file without data row when importing,Yuichi HARADA,Closed,"","It is suggested to display a message indicating that there is no data when trying to import a file that has no data.
+
+!{width:400px;border:1px solid grey;}message-no-data.png!"
+35086,Please consider changing the way how 2FA is set up,robert heiler,Closed,"Related to #35087, Related to #34070, Related to #31920, Related to #1237","Hey guys,
+
+I don't want to write too much, so it is not hard for you to handle this
+issue.
+
+Recently the ruby bug tracker has been changed to require 2FA.
+
+This is a problem for me as I don't have a smartphone, so the change
+locked me out of the bug tracker.
+
+Anyway - this is not about that; I would like to suggest a few things.
+
+(1) Right now if you click ""sign out"" you can not sign out because
+the 2FA wall shows up:
+
+""The administrator requires you to enable two-factor authentication.""
+
+This should be different. It should ALWAYS be possible to sign out
+again. Sure I can use cookies or use another browser, but I logged
+into my account of ~13 years just now. Now the 2FA wall prevents me
+from doing anything, including ""sign out"". This is not good UI.
+
+We should be able to log out (sign out) again.
+
+Anyway this is a smaller part.
+
+(2) The bigger issue is that I don't get any information about
+WHY 2FA is suddenly used, and who enabled it. Yes, I get it,
+the site owner did so, but perhaps the site owner was not aware
+that this will effectively perma-ban some users. Not everyone
+has a smartphone or can use 2FA. I already explained this
+on rubygems.org the github issue tracker, that mandatory 2FA
+means I can no longer use rubygems, so I'd have to remove
+my account at rubygems.org (whereas at github I could still
+publish that code, so this is weird...)
+
+Please consider (2), because it means that the admin of a
+site may accidentally retire people from ruby, without
+even intending to do so. To me this is a dealbreaker, 
+because it means I can no longer use the official bug tracker
+of ruby, which then means I can no longer voice my concern
+(I don't use emails really ... never liked emails in ~over
+20 years...). That means I'd become a second class citizen
+to ruby, compared to other users, and since I have no intention
+to accept this, it would effectively mean that I would also
+abandon ruby in the long run.
+
+Ruby is a great language, but to me mandatory 2FA is not
+acceptable. While this is not the fault of redmine itself,
+I think usability wise several things could be improved.
+
+I assume none of you guys so far thought about how this
+could cause friction and strife, so hopefully the way how
+2FA is explained to users can change in the long run. I
+had slowly collect that information since nothing
+was announced anywhere! Suddenly from one day to the
+other I was slapped into the face with that 2FA wall,
+so perhaps you can understand my frustration here."
+35082,Communicate end of 4.x development,Mischa The Evil,Closed,"","Given:
+* the present Redmine release cycle;
+* the ""Maintenance Policy for Ruby on Rails"":https://guides.rubyonrails.org/maintenance_policy.html and the Rails release cycle;
+* the _assumption_ that Redmine will not bring major Rails upgrades (5.x <notextile>-></notextile> 6.x) in a minor 4.x release;
+* that the Rails 6.1 port has already been committed to the trunk;
+
+I conclude that it has been decided to end the 4.x development after the recent 4.2 release.
+
+Yet, I see that this is not clear for (close) community members who are referring to a (potential) 4.3 release (see eg. #30820#note-15, #32424#note-36, #32424#note-37).
+
+This could be solved by addressing this subject in a news post.
+"
+35073,Escape values in LIKE statements to prevent injection of placeholders (_ or %),Jens Krämer,Closed,"Related to #13347, Related to #19786, Blocks #35764","While not technically a security risk, LIKE queries with lots of placeholders can result in high database load, very slow query execution and therefore are a possible vector for denial of service attacks. Further, escaping the wildcard characters in actual query values now allows to actually search for values containing these characters.
+
+The attached patches, which have been extracted from ""Planio"":https://plan.io/redmine-hosting are:
+
+* The first patch removes '%' signs from query strings used in the search test case. These did not matter until now since they just resulted in queries like @field LIKE '%%value%%'@, but now would be looking for a value with literal percent signs. Tests pass before and after that change.
+* Patches 2-4 add @sanitize_sql_like@ calls to the various places where we currrently generate sql LIKE statements. Corresponding tests are included.
+* The last patch is just a cosmetic change that replaces a @.send@ with a direct call since the called method is now public.
+"
+35030,Allow parallel testing,Go MAEDA,Closed,"","Rails 6.0 or later supports parallel testing. Enabling this feature can reduce the time required for testing and improve development efficiency.
+https://guides.rubyonrails.org/testing.html#parallel-testing
+
+By applying the following patch and run the test suite with @PARALLEL_WORKERS=6@ environment variable in my environment, the time required to run the test suite was reduced to about 30%.
+
+<pre><code class=""diff"">
+diff --git a/test/test_helper.rb b/test/test_helper.rb
+index 10f4f6e35..95b877d44 100644
+--- a/test/test_helper.rb
++++ b/test/test_helper.rb
+@@ -53,6 +53,8 @@ class ActionView::TestCase
+ end
+ 
+ class ActiveSupport::TestCase
++  parallelize(workers: 1)
++
+   include ActionDispatch::TestProcess
+ 
+   self.use_transactional_tests = true
+</code></pre>
+
+The reason why the number of workers is set to 1 is that parallel testing causes some errors in system test."
+35014,Review and update supported database engines and versions ,Marius BĂLTEANU,Closed,Related to #39437,"Supported database engines and versions were not been updated for a while and we should do it in Redmine version:""6.0.0"". 
+
+|_/2-. Redmine version|_/2-. Supported Ruby versions        |_/2-. Rails version used |_\4=. Recommended Databases                      | 
+                                                                                      |*PostgreSQL* |*MySQL*     |*MSSQL*    | *SQLite* | 
+|trunk (>= r22053)    |2.7, 3.0, 3.1, 3.2                   |Rails 6.1                |14           |8.0 - 8.1   |>2012      | 3        |
+|5.1                  |2.7, 3.0, 3.1, 3.2                   |Rails 6.1                |>9.2         |5.7 - 8.1   |>2012      | 3        |
+|5.0                  |Ruby 2.5[1], 2.6[1], 2.7, 3.0, 3.1   |Rails 6.1                |>9.2         |5.7 - 5.7   |>2012      | 3        |
+|4.2                  |Ruby 2.4[1], 2.5[1], 2.6, 2.7[2]     |Rails 5.2                |>9.2         |5.5 - 5.7   |>2012      | 3        |"
+35001,Disable API authentication with username and password when two-factor authentication is enabled for the user,Go MAEDA,Closed,Related to #1237,"In Redmine 4.2, two-factor authentication has been introduced.
+
+When two-factor authentication is enabled, it becomes difficult for an attacker to log in to Redmine even if he knows the username and password.
+
+However, API authentication is not covered by two-factor authentication. Currently, there are three methods of API authentication:
+
+1. send the user's API key via X-Redmine-API-Key header
+2. basic authentication with the user's API key ( username is the API key and password is a random string)
+3. basic authentication with user name and password
+
+If you have two-factor authentication enabled, I think the third method will be problematic. This is because even though the web UI can prevent an attacker from logging in with an illegally obtained username and password, they can still use that username and password to access the data via the API.
+
+To address this risk, I suggest disabling basic authentication with username and password for users who have two-factor authentication enabled.
+"
+34992,Ruby 3.0 support,Go MAEDA,Closed,"Related to #34986, Related to #37249, Blocked by #29914","Ruby 3.0.0 has been released on 25 Dec 2020.
+https://www.ruby-lang.org/en/news/2020/12/25/ruby-3-0-0-released/
+"
+34978,Add the list of supported browsers to docs and drop support for IE 11,Marius BĂLTEANU,Closed,"Related to #34841, Related to #10328, Related to #16895, Related to #38228, Related to #33240, Related to #8370","Beginning August 17, 2021, the remaining Microsoft 365 apps and services will no longer support IE 11. Microsoft Teams already ended support. More details ""here"":https://techcommunity.microsoft.com/t5/microsoft-365-blog/microsoft-365-apps-say-farewell-to-internet-explorer-11-and/ba-p/1591666#:~:text=Today%2C%20we're%20announcing%20that,no%20longer%20support%20IE%2011.
+
+It's time to drop support for IE11 and supports only Microsoft Edge (Chromium version)"
+34942,"Support for Git repositories with default branch ""main""",Go MAEDA,Closed,"","Since GitHub renamed the default branch name from ""master"" to ""main"" in 2020, more and more Git repositories in the world have the default branch of “main” instead of “master”. However, Redmine does not recognize ""main"" branch as the default branch.
+https://github.com/github/renaming
+
+After applying the attached patch, ""main"" will be recognized as the default branch in addition to ""master""."
+34932,"""Copy link"" feature for issues list",Mizuki ISHIKAWA,Closed,"Related to #34703, Related to #14125","Added the feature to copy issue and journal links by #34703.
+I think it would be convenient if that feature could also be used in the context menu.
+
+If you have selected one issue:
+* Copy to https://redmine-host/issues/:id
+
+If you have selected multiple issue:
+* Copy to https://redmine-host/issues?issue_id=1%2C2&set_filter=1&status_id=%2A (https://redmine-host/issues?issue_id=1,2&set_filter=1&status_id=*)
+!{width: 50%; border: 1px solid #ccc}after-accessing-the-copied-url.png!"
+34924,Add Tamil language support,Dhanasingh Krishnapandian,Closed,Precedes #39751,Tamil India language files
+34863,Change default text formatter for new installations from textile to common_mark,Marius BĂLTEANU,Closed,"Related to #35952, Related to #37365, Blocked by #36807","Nowadays, markdown is much more used and known compared with textile. Also, in Redmine, Markdown has better support.
+
+My proposal is to change the default setting from textile to markdown."
+34857,"Add total estimated hours, spent hours, total spent hours for issues to issue list API",Felix Schäfer,Closed,"Has duplicate #18943, Has duplicate #5303, Has duplicate #35989","The issue index API currently does not return total estimated hours, spent hours and total spent hours, although the issue show API does show those fields."
+34833,Allow redmine to provide reply-to email header,Gary Aitken,Closed,"","Redmine outgoing email does not provide a reply-to header.  Many email relays which require a user-id/pw login (e.g. smtp.gmail.com) replace the sender@domain with the user-id of the login account.  Consequently, when the receiver replies to the email, it goes to the login user-id and domain, rather than the sender user@domain set by redmine where the issue originated.
+
+This patch provides a check-box in the email-notifications settings which, when set, causes redmine to provide a reply-to header identical to the sender (user@domain).  This allows replies to be routed to the redmine instance where they originated, and be incorporated into the issue.
+
+The attached tarball of .diff files is for:
+  redmine-4.1.1
+  ruby 2.6.6p146  (not relevant)
+  Rails 5.2.4.2   (provides base mailer, not especially relevant)
+  mysql 5.7       (not relevant)
+  plugins: Additionals (not relevant)"
+34821,find tickets assigned to former employees,Han Boetes,Closed,"","I got a question if I could find all tickets assigned to former employees and I wrote this not very pretty but working script:
+
+<pre>
+#!/bin/sh
+disabled_users=$(echo 'select id from users where status = 3;' | mysql -N redmine)
+for du in $disabled_users; do echo ""select project_id, id, assigned_to_id from issues where assigned_to_id = $du and status_id = 2;"" | mysql -N redmine; done | \
+while read project id user; do
+  PN=$(echo ""select name from projects where id = $project"" | mysql -N redmine)
+  user=$(echo ""select login from users where id = $user"" | mysql -N redmine)
+  echo ""Ticket $id in project '$PN' is assigned to '$user'"" 
+done
+</pre>
+
+* I'm aware this could be done with one mysql statement, but my mysql skills are rather bad and this works as well. Improvements are welcome of course.
+* I've read this feature has been implemented in redmine 4, so this is for all redmine 3 users."
+34798,Show project tree instead of subprojects in the project selector when you create a new issue ,Marius BĂLTEANU,Closed,"","In #12704, we allowed to select a subproject when you create a new issue. My proposal is to change the behaviour and show the project tree instead of subtasks.
+
+In this way, you will be able to select also a parent instead of only children.
+
+"
+34797,Make default_assignee available through API,Sébastien Lardière,Closed,"","Since #33113, the default_assignee field in a project is available through the API, but in read omly : we cannot create a project with this field through the API. 
+
+Maybe I'm wrong, then, please, let me know how can I do that ? 
+
+Is this feature can be added in the API ? 
+
+thanks, "
+34794,Allow newlines and quote characters within mail body delimiters,Holger Just,Closed,"","When processing incoming emails, there is the possibility to define body delimiters after which no further content should be read from the mail body.
+
+When defining long delimiters (e.g. commonly in @Setting.emails_header@), the delimiter may break into multiple lines in replies with (nested) quote characters at the beginning of lines.
+
+With the attached patch, we extend the handling of ""normal"" delimiters (i.e. delimiters not defined as regular expressions) so that any space within the delimiter can also span multiple lines with optional quote characters at the front. This ensures that even delimiters broken over multiple lines in incoming mails will be recognized as such.
+
+The patch is against current trunk (r20752) and can be applied with @patch -p1 < 0001-Allow-newlines-and-quote-characters-within-mail-body.patch@."
+34787,"Ability to set default value for  ""I don't want to be notified of changes that I make myself""",Pierre DEPREY,Closed,"Related to #14574, Has duplicate #24629","Hello,
+
+I search many possibilites to change the default value of no_self_notified when creating a new user.
+Actually default is true.
+
+line 54 to 56 in /app/models/user_preference.rb
+
+<pre><code class=""ruby"">
+unless attributes && attributes.key?(:no_self_notified)
+  self.no_self_notified = true
+end
+</code></pre>
+
+might be :
+
+<pre><code class=""ruby"">
+unless attributes && attributes.key?(:no_self_notified)
+  self.no_self_notified = Setting.default_users_no_self_notified
+end
+</code></pre>
+
+and add in config/settings.yml
+
+<pre><code class=""yaml"">
+default_users_no_self_notified:
+  default: true
+</code></pre>
+
+With this change, we can modify the default value without changing source code of Redmine.
+
+this may be implemented in a future release ?
+
+Regards, 
+
+Pierre"
+34766,Better error message when no API format is recognised,Felix Schäfer,Closed,Has duplicate #26709,"At Planio sometimes see users trying to make API requests using the HTTP @Accept: application/json@ header but forgetting to add @.json@ at the end of the path. This currently leads to a @raise@ with a @500 Internal Server Error@.
+
+We propose the following patch to correctly return a @406 Not Acceptable@ (this is the same HTTP status Rails uses when the passed @Accept@ HTTP header can not be served), log the error instead of @raise@-ing, and returning a helpful message in the HTTP response.
+
+
+<pre><code class=""diff"">
+diff --git a/lib/redmine/views/builders.rb b/lib/redmine/views/builders.rb
+index 653c1bd6b..3c977df67 100644
+--- a/lib/redmine/views/builders.rb
++++ b/lib/redmine/views/builders.rb
+@@ -30,7 +30,9 @@ module Redmine
+             when 'xml',  :xml  then Builders::Xml.new(request, response)
+             when 'json', :json then Builders::Json.new(request, response)
+             else
+-              raise ""No builder for format #{format}""
++              Rails.logger.error ""No builder for format #{format.inspect}""
++              response.status = 406
++              return ""We couldn't handle your request, sorry. If you were trying to access the API, make sure to append .json or .xml to your request URL.\n""
+             end
+           if block_given?
+             yield(builder)
+</code></pre>"
+34762,Display more detailed error message when attempting to import malformed CSV file,Go MAEDA,Closed,"","Currently, the error message when attempting to import a malformed CSV file is too simple, just says ""The file is not a CSV file or does not match the settings below"". So it is difficult to identify problems with the CSV file.
+
+The attached patch adds an exception message from Ruby's CSV class. It makes it much easier to debug the cause of importing error.
+
+!{width: 784px; border: 1px solid grey;}.detailed-error.png!"
+34718,Auto guess file encoding when importing CSV file,Go MAEDA,Closed,"","When importing a CSV file, file encoding is pre-selected according to general_csv_encoding in config/locales/*.yml. For example, ""CP932"" is selected by default when your language setting is Japanese.
+
+I often use CSV files with UTF-8 encoding, but it's a bother to re-select UTF-8 in the encoding drop-down every time.
+
+It would be nice if Redmine auto guesses the file encoding when importing a CSV file. Redmine already auto guess file encoding when displaying attached files or repository contents using @Setting.repositories_encodings@.
+"
+34715,Filter issues by file description,Go MAEDA,Closed,"","Currently, Redmine has a feature to filter issues by attachment file name (#2783).
+
+I think it would be even useful if it is possible to filter issues by attachment file description. Using both file name and description makes it much easier to find files or issues. "
+34714,Move delete button for issues and journals to the dropdown menu,Mizuki ISHIKAWA,Closed,Related to #34703,"I would like to include infrequently used link such as Delete and Copy in Actions Dropdown.
+This is a patch that is based on the current features of the wiki.
+!{width: 70%; border: 1px solid #ccc}screenshot_2021-02-12_15.41.37.png!
+
+The reason for making this issue:
+* There are many icons on the view, so I would like to make it a little simpler.
+* I am trying to increase the number of ""copy links"" links in #34703. Then there will be more icons than now.
+* Journal action links only show icons, but there are some features that are difficult to understand with just the icons.
+
+Concern:
+The same icon is used for the context menu of related issues on the page, and it may be misunderstood that the link added this time also opens the context menu."
+34703,"""Copy link"" feature for issue and issue journal",Mizuki ISHIKAWA,Closed,"Related to #34714, Related to #34932","When you are looking at a issue with Redmine and want to share the URL, if you copy the URL with a browser, it will be a long URL with many unnecessary parameters such as issue_count and prev_issue_id.
+
+I think it would be convenient to be able to copy a simple URL from the view.
+
+* URL of the issue to be copied： @https://<your redmine>/issues/1@
+* URL of the issue journal to be copied： @http://<your redmine>/issues/1#note-1@"
+34700,Allow to use watch_by filter in the global issues list,Holger Just,Closed,Related to #8160,"In #8160, we introduced the ability to filter by specific watchers (rather than just ""me""). However, due to the permission check inside the @Query#watcher_values@ method, this capability was only available inside a project. In the global issues view, the filter still only offered ""me"".
+
+The attached patch against current trunk (r20742) fixes this behavior to also offer all visible watchers on the global issues view. The patch is a git patch which can be applied with
+
+<pre>
+patch -p1 < 0001-Allow-to-use-watch_by-filter-in-the-global-issues-li.patch
+</pre>"
+34608,assigne contact in issues,Nikos Kotronakis,Closed,"","hello,
+
+do we know any way to add a contact to issue? I have a big progect with many issues, so i want if it's possible to add a contact each time.
+
+thanks"
+34583,Group by parent project,Mary Cox,Closed,"","How do I export a list which includes the parent project name, or group by the parent project?"
