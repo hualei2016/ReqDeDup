@@ -2,7 +2,7 @@
 
 The project is intended to design a requirement dedup tool, based on embedding and LLM. Please refer to the following wiki page for details:
 	[基于大模型的需求自动去重工具](https://avb8u30devt.feishu.cn/wiki/Vy9EwKXNZi5D6WkzMZDcyKKUnCe)
-	p.s. I will do the translation later
+	(p.s. I will do the translation later)
 
 The code is written in Jupyter Notebook:
 
